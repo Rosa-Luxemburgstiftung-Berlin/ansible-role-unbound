@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include rls.unbound"
+      include_role:
+        name: "rls.unbound"
