@@ -6,7 +6,7 @@
 {% for section, sectionconfig in undbound_config.items() | list %}
 {% if sectionconfig %}
 {% if sectionconfig is iterable and not sectionconfig is mapping %}
-{# assumes this is a section with optional multiple entires #}
+{# assumes this is a section with multiple entires aka. list of dicts #}
 {% for sectionconfiglistpart in sectionconfig %}
 {{ section }}:
 {% for k, v in sectionconfiglistpart.items() | list %}
@@ -19,7 +19,7 @@
 	{% endif -%}
 {% endfor -%} {# end for k, v in sectionconfiglistpart.items() #}
 {% endfor -%} {# end for sectionconfiglistpart in sectionconfig #}
-{% else -%} {# assumes this is simple section #}
+{% else -%} {# assumes this is simple section i.e. a dict of config options #}
 {{ section }}:
 {% for k, v in sectionconfig.items() | list %}
 	{% if v is string %}
