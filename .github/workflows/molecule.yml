@@ -1,0 +1,30 @@
+---
+name: molecule test
+on:
+  pull_request:
+  push:
+  schedule:
+    - cron: "10 6 * * 1"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          path: 'rls.unbound'
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Install test dependencies.
+        run: pip3 install ansible "molecule[docker,lint]" yamllint ansible-lint requests
+
+      - name: run molecule tests
+        run: molecule test
+        working-directory: rls.unbound
+        env:
+          PY_COLORS: '1'
+          ANSIBLE_FORCE_COLOR: '1'
