@@ -18,6 +18,8 @@ unbound_cfg_templates_incl:
 # we keep the defaults minimal,
 # so you should ensure to adjust them to your needs
 # before you deploy this role
+# example:
+#  https://raw.githubusercontent.com/NLnetLabs/unbound/master/doc/example.conf.in
 undbound_config:
   # server options
   server:
@@ -46,6 +48,6 @@ undbound_config:
   # view options list. each with a name: and zero or more local-zone and local-data elements
   #   if you use just one list entry, you can define it directly as a dict
   view: []
-  # optionsl further sections for unbound like
+  # optional further sections for unbound like
   # python: []
   # dynlib-file: []
