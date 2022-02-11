@@ -4,6 +4,7 @@
 - name: install unbound packages
   apt:
     name: "{{ unbound_packages }}"
+    update_cache: true
 
 - name: remove system config files
   file:
@@ -24,7 +25,7 @@
 - name: config unbound
   template:
     src: "{{ item }}.j2"
-    dest: "{{ unbound_cfg_dir_incl }}/{{ item }}" 
+    dest: "{{ unbound_cfg_dir_incl }}/{{ item }}"
     owner: root
     group: root
     mode: 0644
