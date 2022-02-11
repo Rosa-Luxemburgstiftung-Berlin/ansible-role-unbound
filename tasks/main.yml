@@ -11,6 +11,7 @@
     path: "{{ unbound_cfg_dir_incl }}/{{ item }}"
     state: absent
   with_items: "{{ unbound_remove_files_incl }}"
+  notify: "restart unbound"
 
 - name: main config file for unbound
   copy:
