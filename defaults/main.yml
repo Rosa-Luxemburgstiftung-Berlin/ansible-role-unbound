@@ -1,2 +1,35 @@
 ---
 # defaults file for rls.unbound
+
+# just change this if you know what you are doing ...
+unbound_cfg_dir_main: /etc/unbound
+unbound_cfg_dir_incl: "{{ unbound_cfg_dir_main }}/unbound.conf.d"
+unbound_cfg_file_main: "{{ unbound_cfg_dir_main }}/unbound.conf"
+
+# this will be removed
+unbound_remove_files_incl:
+  - root-auto-trust-anchor-file.conf
+
+# list of cfg templates to use
+unbound_cfg_templates_incl:
+  - 01server.conf
+  - rebind.conf
+
+# we keep the defaults minimal,
+# so you should ensure to adjust them to your needs
+# before you deploy this role
+undbound_server_config:
+  verbosity: 1
+  port: 53
+  # interface: "{{ ansible_interfaces }}"  # enable this to use all interfaces defined at deploy
+  access-control:
+    - 127.0.0.1/8 allow
+    - "::1/64 allow"
+  # The following line will configure unbound to perform cryptographic
+  # DNSSEC validation using the root trust anchor.
+  # auto-trust-anchor-file: "/var/lib/unbound/root.key"
+
+# remote-control part
+unbound_remote_control: {}
+#  control-enable: "yes"
+#  control-interface: 127.0.0.1

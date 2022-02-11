@@ -1,2 +1,7 @@
 ---
 # handlers file for rls.unbound
+
+- name: restart unbound
+  service:
+    name: unbound
+    state: restarted

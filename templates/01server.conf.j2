@@ -1,0 +1,29 @@
+#jinja2: lstrip_blocks: True
+# {{ ansible_managed }}
+
+# main server config file for unbound
+
+server:
+{% for k, v in undbound_server_config.items() | list %}
+	{% if v is string %}
+	{{ k }}: {{ v }}
+	{% elif v is iterable %}
+	{% for le in v %}
+	{{ k }}: {{ le }}
+	{% endfor -%}
+	{% endif -%}
+{% endfor -%}
+
+{% if unbound_remote_control %}
+remote-control:
+{% for k, v in unbound_remote_control.items() | list %}
+	{% if v is string %}
+	{{ k }}: {{ v }}
+	{% elif v is iterable %}
+	{% for le in v %}
+	{{ k }}: {{ le }}
+	{% endfor -%}
+	{% endif -%}
+{% endfor -%}
+{% endif %}
+

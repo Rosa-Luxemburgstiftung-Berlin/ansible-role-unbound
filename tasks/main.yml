@@ -1,2 +1,33 @@
 ---
 # tasks file for rls.unbound
+
+- name: install unbound
+  apt:
+    name: unbound
+
+- name: remove system config files
+  file:
+    path: "{{ unbound_cfg_dir_incl }}/{{ item }}"
+    state: absent
+  with_items: "{{ unbound_remove_files_incl }}"
+
+- name: main config file for unbound
+  copy:
+    src: unbound.conf
+    dest: "{{ unbound_cfg_file_main }}"
+    state: file
+    owner: root
+    group: root
+    mode: 0644
+  notify: "restart unbound"
+
+- name: config unbound
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ unbound_cfg_dir_incl }}/{{ item }}" 
+    owner: root
+    group: root
+    mode: 0644
+    validate: /usr/sbin/unbound-checkconf %s
+  with_items: "{{ unbound_cfg_templates_incl }}"
+  notify: "restart unbound"
