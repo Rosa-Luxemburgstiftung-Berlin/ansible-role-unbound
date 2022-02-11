@@ -1,9 +1,9 @@
 ---
 # tasks file for rls.unbound
 
-- name: install unbound
+- name: install unbound packages
   apt:
-    name: unbound
+    name: "{{ unbound_packages }}"
 
 - name: remove system config files
   file:

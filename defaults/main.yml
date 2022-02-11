@@ -1,6 +1,10 @@
 ---
 # defaults file for rls.unbound
 
+unbound_packages:
+  - unbound
+  - dns-root-data
+
 # just change this if you know what you are doing ...
 unbound_cfg_dir_main: /etc/unbound
 unbound_cfg_dir_incl: "{{ unbound_cfg_dir_main }}/unbound.conf.d"
