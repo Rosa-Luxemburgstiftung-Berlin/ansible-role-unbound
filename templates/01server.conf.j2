@@ -3,8 +3,13 @@
 
 # main server config file for unbound
 
-server:
-{% for k, v in undbound_server_config.items() | list %}
+{% for section, sectionconfig in undbound_config.items() | list %}
+{% if sectionconfig %}
+{% if sectionconfig is iterable and not sectionconfig is mapping %}
+{# assumes this is a section with optional multiple entires #}
+{% for sectionconfiglistpart in sectionconfig %}
+{{ section }}:
+{% for k, v in sectionconfiglistpart.items() | list %}
 	{% if v is string %}
 	{{ k }}: {{ v }}
 	{% elif v is iterable %}
@@ -12,11 +17,11 @@ server:
 	{{ k }}: {{ le }}
 	{% endfor -%}
 	{% endif -%}
-{% endfor -%}
-
-{% if unbound_remote_control %}
-remote-control:
-{% for k, v in unbound_remote_control.items() | list %}
+{% endfor -%} {# end for k, v in sectionconfiglistpart.items() #}
+{% endfor -%} {# end for sectionconfiglistpart in sectionconfig #}
+{% else -%} {# assumes this is simple section #}
+{{ section }}:
+{% for k, v in sectionconfig.items() | list %}
 	{% if v is string %}
 	{{ k }}: {{ v }}
 	{% elif v is iterable %}
@@ -24,6 +29,8 @@ remote-control:
 	{{ k }}: {{ le }}
 	{% endfor -%}
 	{% endif -%}
-{% endfor -%}
-{% endif %}
+{% endfor -%} {# end for k, v in sectionconfig.items() #}
+{% endif -%} {# end sectionconfig is iterable and not sectionconfig is mapping #}
 
+{% endif -%} {# end if sectionconfig #}
+{% endfor -%} {# end for section, sectionconfig is undbound_config.items() #}

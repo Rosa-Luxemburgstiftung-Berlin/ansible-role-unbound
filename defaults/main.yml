@@ -18,18 +18,34 @@ unbound_cfg_templates_incl:
 # we keep the defaults minimal,
 # so you should ensure to adjust them to your needs
 # before you deploy this role
-undbound_server_config:
-  verbosity: 1
-  port: 53
-  # interface: "{{ ansible_interfaces }}"  # enable this to use all interfaces defined at deploy
-  access-control:
-    - 127.0.0.1/8 allow
-    - "::1/64 allow"
-  # The following line will configure unbound to perform cryptographic
-  # DNSSEC validation using the root trust anchor.
-  # auto-trust-anchor-file: "/var/lib/unbound/root.key"
-
-# remote-control part
-unbound_remote_control: {}
-#  control-enable: "yes"
-#  control-interface: 127.0.0.1
+undbound_config:
+  # server options
+  server:
+    verbosity: 1
+    port: 53
+    # interface: "{{ ansible_interfaces }}"  # enable this to use all interfaces defined at deploy
+    access-control:
+      - 127.0.0.1/8 allow
+      - "::1/64 allow"
+    # The following line will configure unbound to perform cryptographic
+    # DNSSEC validation using the root trust anchor.
+    # auto-trust-anchor-file: "/var/lib/unbound/root.key"
+  # remote-control options
+  remote-control: {}
+    # control-enable: "yes"
+    # control-interface: 127.0.0.1
+  # stub-zone options list, each with a name: and zero or more hostnames or IP addresses
+  #   if you use just one list entry, you can define it directly as a dict
+  stub-zone: []
+  # forward-zone options list, each with a name: and zero or more hostnames or IP addresses
+  #   if you use just one list entry, you can define it directly as a dict
+  forward-zone: []
+  # auth-zone options list, each one must have a name:
+  #   if you use just one list entry, you can define it directly as a dict
+  auth-zone: []
+  # view options list. each with a name: and zero or more local-zone and local-data elements
+  #   if you use just one list entry, you can define it directly as a dict
+  view: []
+  # optionsl further sections for unbound like
+  # python: []
+  # dynlib-file: []
