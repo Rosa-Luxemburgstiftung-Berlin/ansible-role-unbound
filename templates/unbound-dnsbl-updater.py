@@ -1,0 +1,214 @@
+#! /usr/bin/env python3
+# vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 smartindent nu ft=python
+
+# Ansible managed
+
+# this file is part of
+# https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound
+# (c) 2022 Klaus Zerwes for Rosa-Luxemburgstiftung-Berlin
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+#
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+__doc__ = """
+simple script to fetch a defined list of dnsbl uri's
+and convert them to unbound compatible format 
+"""
+
+import sys
+import os
+import subprocess
+import argparse
+import requests
+import logging
+import logging.handlers
+import tempfile
+import urllib3
+from lockfile import LockFile, LockTimeout, locked
+import http.client as http_client
+from datetime import date
+
+# list of dnsbl uri's to fetch
+DNSBL_LISTS = [
+            'https://threatfox.abuse.ch/downloads/hostfile',
+            'https://adaway.org/hosts.txt',
+        ]
+
+# list of domains to exclude
+DNSBL_EXCLUDE = [
+        ]
+
+class LoggingAction(argparse.Action):
+  def __call__(self, parser, namespace, values, option_string=None):
+    logger = logging.getLogger()
+    logger.setLevel(values)
+    setattr(namespace, self.dest, values)
+
+def validatednsbl(filename):
+    try:
+        subprocess.check_output(
+                ['/usr/sbin/unbound-checkconf', filename],
+                stderr=subprocess.STDOUT
+            )
+        logging.info('unbound-checkconf %s: OK' % filename)
+        return (0, 'OK')
+    except subprocess.CalledProcessError as e:
+        return (e.returncode, e.output)
+
+def writednsbl2file(filep, domains):
+    for domain in domains:
+        if domain.startswith('#'):
+            line = domain
+        else:
+            line = 'local-data: "%s A 0.0.0.0"' % domain
+        filep.write('%s\n' % line)
+
+def main(args):
+    logger = logging.getLogger()
+    #logging.basicConfig(
+    #    level=logging.WARN,
+    #    format='%(levelname)s\t[%(name)s] %(funcName)s: %(message)s'
+    #)
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        '-l', '--loglevel',
+        help='set loglevel',
+        type=str,
+        choices=[k for k in list(logging._nameToLevel.keys()) if isinstance(k, str)],
+        action=LoggingAction
+    )
+    parser.add_argument(
+        '-s', '--syslog', help='log to syslog',
+        dest='syslog', action='store_true', default=False
+    )
+    parser.add_argument(
+        '-n', '--dry-run', help='dry run, no final action including the dnsbl into unbound',
+        dest='dryrun', action='store_true', default=False
+    )
+    parser.add_argument(
+        '-g', '--np-garbage-cleanup', help='do not delete temporary files',
+        dest='garbage', action='store_true', default=False
+    )
+    parser.add_argument(
+        '-t', '--tempdir', help='temp directory to store files (defaults: /tmp)',
+        dest='tempdir', action='store', default='/tmp'
+    )
+    parser.add_argument(
+        '-c', '--no-checkconf', help='do not validate files using unbound-checkconf',
+        dest='nocheckconf', action='store_true', default=False
+    )
+    args = parser.parse_args()  
+    if args.syslog:
+        syslogh = logging.handlers.SysLogHandler(address = '/dev/log')
+        syslogh.setFormatter(logging.Formatter('%(module)s : %(funcName)s: %(message)s'))
+        logger.setLevel(logging.INFO)
+        if logger.isEnabledFor(logging.DEBUG):
+            syslogh.setLevel(logging.DEBUG)
+        else:
+            syslogh.setLevel(logging.INFO)
+        logger.addHandler(syslogh)
+        stdouth = logging.StreamHandler(sys.stdout)
+        stdouth.setLevel(logging.WARN)
+        stdouth.setFormatter(logging.Formatter('%(levelname)s\t[%(name)s] %(funcName)s: %(message)s'))
+        logger.addHandler(stdouth)
+
+    if logger.isEnabledFor(logging.DEBUG):
+        http_client.HTTPConnection.debuglevel = 1
+        requests_log = logging.getLogger("requests.packages.urllib3")
+        requests_log.setLevel(logging.DEBUG)
+        requests_log.propagate = True
+
+    # start fetching
+    logger.info('start at %s' % date.today().ctime())
+    errorcount = 0
+    domainlist = []
+    dnsbltmp = tempfile.NamedTemporaryFile(dir=args.tempdir, prefix='unbound-dnsbl', delete=False, mode='w+', newline='\n')
+    logger.info('using %s as main  temp file' % dnsbltmp.name)
+    dnsbltmp.write('# dnsbl file created by %s at %s\n' % (os.path.basename(__file__), date.today().ctime(),))
+    dnsbltmp.write('server:\n')
+    for dnsbluri in DNSBL_LISTS:
+        logger.info('start: %s' % dnsbluri)
+        filename = dnsbluri.split(':')[1].split('?')[0].replace('/', '.')
+        try:
+            r = requests.get(dnsbluri)
+            if r.status_code == 200:
+                currentdomainlist = []
+                dnsbltmp.write('# %s\n' % dnsbluri)
+                for line in r.text.splitlines():
+                    line = line.strip()
+                    if not line:
+                        continue
+                    if line.startswith('#'):
+                        continue;
+                    lineparts = line.split()
+                    # no need for big ipv6 matching regex here
+                    if '::' in lineparts[0]:
+                        continue
+                    if lineparts[0] in ['127.0.0.1', '0.0.0.0']:
+                        domain = lineparts[1]
+                    else:
+                        domain = lineparts[0]
+                    if domain in domainlist:
+                        domain = '# %s' % domain
+                    for exclude in DNSBL_EXCLUDE:
+                        if domain.endswith(exclude):
+                            domain = '# excluded: %s' % domain
+                    currentdomainlist.append(domain)
+                if not args.nocheckconf:
+                    tmpf = tempfile.NamedTemporaryFile(dir=args.tempdir, prefix='unbound-dnsbl', delete=False, mode='w+', newline='\n')
+                    tmpf.write('server:\n')
+                    writednsbl2file(tmpf, currentdomainlist)
+                    tmpf.close()
+                    (validatecode, validatemsg) = validatednsbl(tmpf.name)
+                    if validatecode > 0:
+                        logger.warn('validation of %s failed with %s' % (tmpf.name, validatecode,))
+                        logger.warn(validatemsg)
+                        errorcount += 1
+                    else:
+                        writednsbl2file(dnsbltmp, currentdomainlist)
+                        domainlist.extend(currentdomainlist)
+                if not args.garbage:
+                    os.unlink(tmpf.name)
+        except requests.Timeout as e:
+            logger.fatal('requests.Timeout errorcode %s : error: %s' % (e.code, e ))
+            errorcount += 1
+        except requests.RequestException as e:
+            logger.fatal('requests.RequestException: %s' % e)
+            errorcount += 1
+    
+    dnsbltmp.close()
+    
+    if not args.nocheckconf:
+         (validatecode, validatemsg) = validatednsbl(dnsbltmp.name)
+         if validatecode > 0:
+             logger.fatal('validation of %s failed with %s' % (tmpf.name, validatecode,))
+             logger.warn(validatemsg)
+             sys.exit(126)
+
+    # copy temp file into unbound config dir and reload unbound
+    os.rename(dnsbltmp.name, '/etc/unbound/unbound.conf.d/dnsbl.conf')
+    try:
+        if not args.nocheckconf:
+            subprocess.check_output(['/usr/sbin/unbound-checkconf'], stderr=subprocess.STDOUT)
+        subprocess.check_output(['/usr/bin/systemctl', 'restart', 'unbound'], stderr=subprocess.STDOUT)
+    except subprocess.CalledProcessError as e:
+        logger.fatal('command %s exited with %s' % (e.cmd, e.returncode,))
+        logger.warn(e.output)
+        sys.exit(126)
+
+    logger.info('done with %s errors at %s' % (errorcount, date.today().ctime(),))
+    sys.exit(errorcount)
+
+if __name__ == "__main__":
+    main(sys.argv[1:])
