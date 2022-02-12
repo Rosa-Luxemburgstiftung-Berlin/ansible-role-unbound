@@ -40,13 +40,17 @@ from datetime import date
 
 # list of dnsbl uri's to fetch
 DNSBL_LISTS = [
-            'https://threatfox.abuse.ch/downloads/hostfile',
-            'https://adaway.org/hosts.txt',
-        ]
+    {% for dnsbluri in dnsbl_lists %}
+        '{{ dnsbluri }}',
+    {% endfor %}
+    ]
 
 # list of domains to exclude
 DNSBL_EXCLUDE = [
-        ]
+    {% for domain in dnsbl_exclude_domains %}
+    '{{ domain }}',
+    {% endfor %}
+    ]
 
 class LoggingAction(argparse.Action):
   def __call__(self, parser, namespace, values, option_string=None):
@@ -75,9 +79,10 @@ def writednsbl2file(filep, domains):
 
 def main(args):
     logger = logging.getLogger()
+    lformat='%(levelname)s\t[%(name)s] %(funcName)s: %(message)s'
     #logging.basicConfig(
     #    level=logging.WARN,
-    #    format='%(levelname)s\t[%(name)s] %(funcName)s: %(message)s'
+    #    format=lformat
     #)
 
     parser = argparse.ArgumentParser(description=__doc__)
@@ -111,7 +116,7 @@ def main(args):
     args = parser.parse_args()  
     if args.syslog:
         syslogh = logging.handlers.SysLogHandler(address = '/dev/log')
-        syslogh.setFormatter(logging.Formatter('%(module)s : %(funcName)s: %(message)s'))
+        syslogh.setFormatter(logging.Formatter('%(module)s %(levelname)s: %(funcName)s: %(message)s'))
         logger.setLevel(logging.INFO)
         if logger.isEnabledFor(logging.DEBUG):
             syslogh.setLevel(logging.DEBUG)
@@ -120,7 +125,7 @@ def main(args):
         logger.addHandler(syslogh)
         stdouth = logging.StreamHandler(sys.stdout)
         stdouth.setLevel(logging.WARN)
-        stdouth.setFormatter(logging.Formatter('%(levelname)s\t[%(name)s] %(funcName)s: %(message)s'))
+        stdouth.setFormatter(logging.Formatter(lformat))
         logger.addHandler(stdouth)
 
     if logger.isEnabledFor(logging.DEBUG):
@@ -197,7 +202,7 @@ def main(args):
              sys.exit(126)
 
     # copy temp file into unbound config dir and reload unbound
-    os.rename(dnsbltmp.name, '/etc/unbound/unbound.conf.d/dnsbl.conf')
+    os.rename(dnsbltmp.name, '{{ unbound_cfg_dir_incl }}/dnsbl.conf')
     try:
         if not args.nocheckconf:
             subprocess.check_output(['/usr/sbin/unbound-checkconf'], stderr=subprocess.STDOUT)
