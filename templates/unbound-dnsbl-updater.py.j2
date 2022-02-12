@@ -144,10 +144,13 @@ def main(args):
     dnsbltmp.write('server:\n')
     for dnsbluri in DNSBL_LISTS:
         logger.info('start: %s' % dnsbluri)
-        filename = dnsbluri.split(':')[1].split('?')[0].replace('/', '.')
         try:
             r = requests.get(dnsbluri)
-            if r.status_code == 200:
+            logger.info('fetched %s w/ %s' % (dnsbluri, r.status_code,))
+            if r.status_code < 200 or r.status_code >= 300:
+                logger.warning('failed to fetched %s : http code: %s' % (dnsbluri, r.status_code,))
+                errorcount += 1
+            else:
                 currentdomainlist = []
                 dnsbltmp.write('# %s\n' % dnsbluri)
                 for line in r.text.splitlines():
@@ -177,8 +180,8 @@ def main(args):
                     tmpf.close()
                     (validatecode, validatemsg) = validatednsbl(tmpf.name)
                     if validatecode > 0:
-                        logger.warn('validation of %s failed with %s' % (tmpf.name, validatecode,))
-                        logger.warn(validatemsg)
+                        logger.warning('validation of %s failed with %s' % (tmpf.name, validatecode,))
+                        logger.warning(validatemsg)
                         errorcount += 1
                     else:
                         writednsbl2file(dnsbltmp, currentdomainlist)
@@ -198,7 +201,7 @@ def main(args):
          (validatecode, validatemsg) = validatednsbl(dnsbltmp.name)
          if validatecode > 0:
              logger.fatal('validation of %s failed with %s' % (tmpf.name, validatecode,))
-             logger.warn(validatemsg)
+             logger.warning(validatemsg)
              sys.exit(126)
 
     # copy temp file into unbound config dir and reload unbound
@@ -209,7 +212,7 @@ def main(args):
         subprocess.check_output(['/usr/bin/systemctl', 'restart', 'unbound'], stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as e:
         logger.fatal('command %s exited with %s' % (e.cmd, e.returncode,))
-        logger.warn(e.output)
+        logger.warning(e.output)
         sys.exit(126)
 
     logger.info('done with %s errors at %s' % (errorcount, date.today().ctime(),))
