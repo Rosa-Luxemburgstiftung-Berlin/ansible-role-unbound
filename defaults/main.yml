@@ -78,7 +78,6 @@ unbound_packages_dnsbl:
 dnsbl_lists_available:
   - https://threatfox.abuse.ch/downloads/hostfile
   - https://adaway.org/hosts.txt
-  - https://justdomains.github.io/blocklists/lists/adguarddns-justdomains.txt
   - https://blocklistproject.github.io/Lists/alt-version/abuse-nl.txt
   - https://blocklistproject.github.io/Lists/alt-version/ads-nl.txt
   - https://blocklistproject.github.io/Lists/alt-version/crypto-nl.txt
@@ -99,6 +98,7 @@ dnsbl_lists_available:
   - https://blocklistproject.github.io/Lists/alt-version/youtube-nl.txt
   - https://justdomains.github.io/blocklists/lists/easylist-justdomains.txt
   - https://justdomains.github.io/blocklists/lists/easyprivacy-justdomains.txt
+  - https://justdomains.github.io/blocklists/lists/adguarddns-justdomains.txt
   - https://justdomains.github.io/blocklists/lists/nocoin-justdomains.txt
   - https://raw.githubusercontent.com/chadmayfield/my-pihole-blocklists/master/lists/pi_blocklist_porn_all.list
   - https://raw.githubusercontent.com/chadmayfield/pihole-blocklists/master/lists/pi_blocklist_porn_top1m.list
