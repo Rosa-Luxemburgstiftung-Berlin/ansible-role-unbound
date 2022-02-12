@@ -1,9 +1,17 @@
 - name: test dnsbl
   hosts: all
   vars:
-    dnsbl_lists: "{{ dnsbl_lists_available }}"
+    #dnsbltestlists:
+    #  - https://raw.githubusercontent.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound/main/molecule/default/testdnsbl.txt
+    #dnsbl_lists: "{{ dnsbl_lists_available + dnsbltestlists }}"
+    # iter all lists takes far too long
+    dnsbl_lists:
+      - https://raw.githubusercontent.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound/main/molecule/default/testdnsbl.txt
+      - "{{ dnsbl_lists_available[0] }}"
+      - "{{ dnsbl_lists_available[1] }}"
+    dnsbl_exclude_domains:
+      - repo.zero-sys.net
   tasks:
     - name: "Include rls.unbound"
       include_role:
         name: "rls.unbound"
-

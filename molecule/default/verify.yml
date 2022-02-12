@@ -9,14 +9,24 @@
     set_fact:
       ip1: "{{ lookup('community.general.dig', 'zero-sys.net.', '@'+ansible_default_ipv4.address) }}"
       ip2: "{{ lookup('community.general.dig', 'test.github.com.', '@'+ansible_default_ipv4.address) }}"
+      ip3: "{{ lookup('community.general.dig', 'dap.zero-sys.net.', '@'+ansible_default_ipv4.address) }}"
+      ip4: "{{ lookup('community.general.dig', 'repo.zero-sys.net.', '@'+ansible_default_ipv4.address) }}"
   - name: debug ip1
     debug:
       var: ip1
   - name: debug ip2
     debug:
       var: ip2
+  - name: debug ip3
+    debug:
+      var: ip3
+  - name: debug ip4
+    debug:
+      var: ip4
   - name: test results
     assert:
       that:
         - ip1 == '65.108.89.174'
         - ip2 == '10.10.10.10'
+        - ip3 == '0.0.0.0'
+        - ip4 == '65.108.89.174'
