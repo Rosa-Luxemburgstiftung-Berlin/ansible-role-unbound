@@ -74,7 +74,6 @@ dnsbl_update_daily: true
 unbound_packages_dnsbl:
   - python3-requests
   - python3-lockfile
-  - python3-urllib3
 
 dnsbl_lists_available:
   - https://threatfox.abuse.ch/downloads/hostfile
