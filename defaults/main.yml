@@ -60,6 +60,8 @@ undbound_config:
 # some resources for dnsbl
 # https://blocklistproject.github.io/Lists/#versions
 # https://justdomains.github.io/blocklists/#using-with-pi-hole
+# https://crazymax.dev/WindowsSpyBlocker/blocking-rules/
+# https://github.com/StevenBlack/hosts
 # https://github.com/AdAway/AdAway/wiki/HostsSources
 
 # ad here some lists in order to enable dnsbl
