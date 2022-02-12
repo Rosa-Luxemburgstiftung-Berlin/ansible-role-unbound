@@ -1,14 +1,9 @@
 - name: test dnsbl
   hosts: all
   vars:
-    #dnsbltestlists:
-    #  - https://raw.githubusercontent.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound/main/molecule/default/testdnsbl.txt
-    #dnsbl_lists: "{{ dnsbl_lists_available + dnsbltestlists }}"
-    # iter all lists takes far too long
-    dnsbl_lists:
+    dnsbltestlists:
       - https://raw.githubusercontent.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound/main/molecule/default/testdnsbl.txt
-      - "{{ dnsbl_lists_available[0] }}"
-      - "{{ dnsbl_lists_available[1] }}"
+    dnsbl_lists: "{{ dnsbl_lists_available + dnsbltestlists }}"
     dnsbl_exclude_domains:
       - repo.zero-sys.net
   tasks:
