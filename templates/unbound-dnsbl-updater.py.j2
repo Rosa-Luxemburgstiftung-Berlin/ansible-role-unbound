@@ -162,7 +162,7 @@ def main(args):
                 logger.warning('failed to fetched %s : http code: %s' % (dnsbluri, r.status_code,))
                 errorcount += 1
             else:
-                currentdomainlist = []
+                currentdomainlist = ['# start %s at %s\n' % (dnsbluri, date.today().ctime(),)]
                 for line in r.text.splitlines():
                     line = line.strip()
                     if not line:
@@ -183,6 +183,8 @@ def main(args):
                         if domain.endswith(exclude):
                             domain = '# excluded: %s' % domain
                     currentdomainlist.append(domain)
+                currentdomainlist.append('# end %s at %s\n' % (dnsbluri, date.today().ctime(),))
+
                 if not args.nocheckconf:
                     tmpf = tempfile.NamedTemporaryFile(
                             dir=args.tempdir,
@@ -195,6 +197,7 @@ def main(args):
                     tmpf.write('server:\n')
                     writednsbl2file(tmpf, currentdomainlist)
                     tmpf.close()
+                    logger.info('%s : check file: %s' % (dnsbluri, tmpf.name))
                     (validatecode, validatemsg) = validatednsbl(tmpf.name)
                     if validatecode > 0:
                         logger.warning(
@@ -202,10 +205,10 @@ def main(args):
                             )
                         logger.warning(validatemsg)
                         errorcount += 1
-                    else:
-                        dnsbltmp.write('# %s\n' % dnsbluri)
-                        writednsbl2file(dnsbltmp, currentdomainlist)
-                        domainlist.extend(currentdomainlist)
+                        continue
+
+                writednsbl2file(dnsbltmp, currentdomainlist)
+                domainlist.extend(currentdomainlist)
                 if not args.garbage:
                     os.unlink(tmpf.name)
         except requests.Timeout as e:
