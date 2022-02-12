@@ -27,6 +27,7 @@ and convert them to unbound compatible format
 
 import sys
 import os
+import shutil
 import subprocess
 import argparse
 import logging
@@ -226,7 +227,7 @@ def main(args):
             sys.exit(126)
 
     # copy temp file into unbound config dir and reload unbound
-    os.rename(dnsbltmp.name, '{{ unbound_cfg_dir_incl }}/dnsbl.conf')
+    shutil.move(dnsbltmp.name, '{{ unbound_cfg_dir_incl }}/dnsbl.conf')
     try:
         if not args.nocheckconf:
             subprocess.check_output(['/usr/sbin/unbound-checkconf'], stderr=subprocess.STDOUT)
