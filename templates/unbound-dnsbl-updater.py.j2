@@ -29,13 +29,13 @@ import sys
 import os
 import subprocess
 import argparse
-import requests
 import logging
 import logging.handlers
+from datetime import date
 import tempfile
 from lockfile import LockFile, LockTimeout, locked
 import http.client as http_client
-from datetime import date
+import requests
 
 # list of dnsbl uri's to fetch
 DNSBL_LISTS = [
@@ -63,7 +63,7 @@ def validatednsbl(filename):
                 ['/usr/sbin/unbound-checkconf', filename],
                 stderr=subprocess.STDOUT
             )
-        logging.info('unbound-checkconf %s: OK' % filename)
+        logging.info('unbound-checkconf %s: OK', filename)
         return (0, 'OK')
     except subprocess.CalledProcessError as e:
         return (e.returncode, e.output)
@@ -137,7 +137,7 @@ def main(args):
         requests_log.propagate = True
 
     # start fetching
-    logger.info('start at %s' % date.today().ctime())
+    logger.info('start at %s', date.today().ctime())
     errorcount = 0
     domainlist = []
     dnsbltmp = tempfile.NamedTemporaryFile(
@@ -147,19 +147,19 @@ def main(args):
             mode='w+',
             newline='\n'
         )
-    logger.info('using %s as main  temp file' % dnsbltmp.name)
+    logger.info('using %s as main  temp file', dnsbltmp.name)
     dnsbltmp.write(
             '# dnsbl file created by %s at %s\n' % (
                     os.path.basename(__file__), date.today().ctime(),)
         )
     dnsbltmp.write('server:\n')
     for dnsbluri in DNSBL_LISTS:
-        logger.info('start: %s' % dnsbluri)
+        logger.info('start: %s', dnsbluri)
         try:
             r = requests.get(dnsbluri)
-            logger.info('fetched %s w/ %s' % (dnsbluri, r.status_code,))
+            logger.info('fetched %s w/ %s', dnsbluri, r.status_code)
             if r.status_code < 200 or r.status_code >= 300:
-                logger.warning('failed to fetched %s : http code: %s' % (dnsbluri, r.status_code,))
+                logger.warning('failed to fetched %s : http code: %s', dnsbluri, r.status_code)
                 errorcount += 1
             else:
                 currentdomainlist = ['# start %s at %s\n' % (dnsbluri, date.today().ctime(),)]
@@ -197,12 +197,10 @@ def main(args):
                     tmpf.write('server:\n')
                     writednsbl2file(tmpf, currentdomainlist)
                     tmpf.close()
-                    logger.info('%s : check file: %s' % (dnsbluri, tmpf.name))
+                    logger.info('%s : check file: %s', dnsbluri, tmpf.name)
                     (validatecode, validatemsg) = validatednsbl(tmpf.name)
                     if validatecode > 0:
-                        logger.warning(
-                                'validation of %s failed with %s' % (tmpf.name, validatecode,)
-                            )
+                        logger.warning('validation of %s failed with %s', tmpf.name, validatecode)
                         logger.warning(validatemsg)
                         errorcount += 1
                         continue
@@ -212,10 +210,10 @@ def main(args):
                 if not args.garbage:
                     os.unlink(tmpf.name)
         except requests.Timeout as e:
-            logger.fatal('requests.Timeout errorcode %s : error: %s' % (e.code, e ))
+            logger.fatal('requests.Timeout errorcode %s : error: %s', e.code, e)
             errorcount += 1
         except requests.RequestException as e:
-            logger.fatal('requests.RequestException: %s' % e)
+            logger.fatal('requests.RequestException: %s', e)
             errorcount += 1
 
     dnsbltmp.close()
@@ -223,7 +221,7 @@ def main(args):
     if not args.nocheckconf:
         (validatecode, validatemsg) = validatednsbl(dnsbltmp.name)
         if validatecode > 0:
-            logger.fatal('validation of %s failed with %s' % (tmpf.name, validatecode,))
+            logger.fatal('validation of %s failed with %s', tmpf.name, validatecode)
             logger.warning(validatemsg)
             sys.exit(126)
 
@@ -237,11 +235,11 @@ def main(args):
                 stderr=subprocess.STDOUT
             )
     except subprocess.CalledProcessError as e:
-        logger.fatal('command %s exited with %s' % (e.cmd, e.returncode,))
+        logger.fatal('command %s exited with %s', e.cmd, e.returncode)
         logger.warning(e.output)
         sys.exit(126)
 
-    logger.info('done with %s errors at %s' % (errorcount, date.today().ctime(),))
+    logger.info('done with %s errors at %s', errorcount, date.today().ctime())
     sys.exit(errorcount)
 
 if __name__ == "__main__":
