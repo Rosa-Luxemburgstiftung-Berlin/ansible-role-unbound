@@ -33,3 +33,30 @@
     validate: /usr/sbin/unbound-checkconf %s
   with_items: "{{ unbound_cfg_templates_incl }}"
   notify: "restart unbound"
+
+- name: dnsbl
+  block:
+    - name: install packages required for dnsbl
+      apt:
+        name: "{{ unbound_packages_dnsbl }}"
+    - name: copy dnsbl collect script
+      template:
+        src: unbound-dnsbl-updater.py.j2
+        dest: "{{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py"
+        mode: 0700
+        owner: root
+        group: root
+    - name: "run {{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py"
+      command: "{{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py -s -l INFO"
+      args:
+        creates: "{{ unbound_cfg_dir_incl }}/dnsbl.conf"
+    - name: register cronjob
+      cron:
+        name: unbounddnsblupdater
+        cron_file: unbounddnsblupdater
+        minute: 15
+        hour: 1
+        user: root
+        job: "{{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py -s -l INFO"
+        state: "{{ 'present' if dnsbl_update_daily else 'absent' }}"
+  when: dnsbl_lists
