@@ -69,12 +69,12 @@ def validatednsbl(filename):
         return (e.returncode, e.output)
 
 def writednsbl2file(filep, domains):
-    for domain in domains:
-        if domain.startswith('#'):
-            line = domain
-        else:
-            line = 'local-data: "%s A 0.0.0.0"' % domain
-        filep.write('%s\n' % line)
+    filep.write(
+        '\n'.join(
+            [d if d.startswith('#') else 'local-data: "%s A 0.0.0.0"' % d for d in domains]
+            )
+        )
+    filep.write('\n')
 
 @locked('/var/lock/dnsbl', timeout=30)
 def main(args):
