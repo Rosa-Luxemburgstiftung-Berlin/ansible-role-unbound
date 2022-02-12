@@ -1,0 +1,9 @@
+- name: test dnsbl
+  hosts: all
+  vars:
+    dnsbl_lists: "{{ dnsbl_lists_available }}"
+  tasks:
+    - name: "Include rls.unbound"
+      include_role:
+        name: "rls.unbound"
+
