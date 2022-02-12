@@ -232,7 +232,7 @@ def main(args):
         if not args.nocheckconf:
             subprocess.check_output(['/usr/sbin/unbound-checkconf'], stderr=subprocess.STDOUT)
         subprocess.check_output(
-                ['/usr/bin/systemctl', 'restart', 'unbound'],
+                ['/usr/sbin/service', 'unbound', 'restart'],
                 stderr=subprocess.STDOUT
             )
     except subprocess.CalledProcessError as e:
