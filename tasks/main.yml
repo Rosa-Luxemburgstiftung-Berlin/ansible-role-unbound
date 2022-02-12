@@ -59,4 +59,6 @@
         user: root
         job: "{{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py -s -l INFO"
         state: "{{ 'present' if dnsbl_update_daily else 'absent' }}"
+      when:
+        - not lookup('env', 'MOLECULE_FILE')
   when: dnsbl_lists
