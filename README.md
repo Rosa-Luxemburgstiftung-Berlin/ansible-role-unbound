@@ -4,6 +4,7 @@
 
 # ansible-role-unbound aka. rls.unbound
 Install [unbound](https://github.com/NLnetLabs/unbound) on debian based systems
+and extend it optionally by using one or more __dnsbl__ lists.
 
 ## Role Variables
 
@@ -52,4 +53,7 @@ undbound_config:
     forward-addr:
       - 1.1.1.1
       - 9.9.9.9
+
+dnsbl_lists:
+  - https://blocklistproject.github.io/Lists/alt-version/abuse-nl.txt
 ```
