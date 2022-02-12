@@ -116,7 +116,9 @@ def main(args):
     args = parser.parse_args()
     if args.syslog:
         syslogh = logging.handlers.SysLogHandler(address = '/dev/log')
-        syslogh.setFormatter(logging.Formatter('%(module)s %(levelname)s: %(funcName)s: %(message)s'))
+        syslogh.setFormatter(
+                logging.Formatter('%(module)s %(levelname)s: %(funcName)s: %(message)s')
+            )
         logger.setLevel(logging.INFO)
         if logger.isEnabledFor(logging.DEBUG):
             syslogh.setLevel(logging.DEBUG)
@@ -138,9 +140,18 @@ def main(args):
     logger.info('start at %s' % date.today().ctime())
     errorcount = 0
     domainlist = []
-    dnsbltmp = tempfile.NamedTemporaryFile(dir=args.tempdir, prefix='unbound-dnsbl', delete=False, mode='w+', newline='\n')
+    dnsbltmp = tempfile.NamedTemporaryFile(
+            dir=args.tempdir,
+            prefix='unbound-dnsbl',
+            delete=False,
+            mode='w+',
+            newline='\n'
+        )
     logger.info('using %s as main  temp file' % dnsbltmp.name)
-    dnsbltmp.write('# dnsbl file created by %s at %s\n' % (os.path.basename(__file__), date.today().ctime(),))
+    dnsbltmp.write(
+            '# dnsbl file created by %s at %s\n' % (
+                    os.path.basename(__file__), date.today().ctime(),)
+        )
     dnsbltmp.write('server:\n')
     for dnsbluri in DNSBL_LISTS:
         logger.info('start: %s' % dnsbluri)
@@ -174,13 +185,21 @@ def main(args):
                             domain = '# excluded: %s' % domain
                     currentdomainlist.append(domain)
                 if not args.nocheckconf:
-                    tmpf = tempfile.NamedTemporaryFile(dir=args.tempdir, prefix='unbound-dnsbl', delete=False, mode='w+', newline='\n')
+                    tmpf = tempfile.NamedTemporaryFile(
+                            dir=args.tempdir,
+                            prefix='unbound-dnsbl',
+                            delete=False,
+                            mode='w+',
+                            newline='\n'
+                        )
                     tmpf.write('server:\n')
                     writednsbl2file(tmpf, currentdomainlist)
                     tmpf.close()
                     (validatecode, validatemsg) = validatednsbl(tmpf.name)
                     if validatecode > 0:
-                        logger.warning('validation of %s failed with %s' % (tmpf.name, validatecode,))
+                        logger.warning(
+                                'validation of %s failed with %s' % (tmpf.name, validatecode,)
+                            )
                         logger.warning(validatemsg)
                         errorcount += 1
                     else:
@@ -209,7 +228,10 @@ def main(args):
     try:
         if not args.nocheckconf:
             subprocess.check_output(['/usr/sbin/unbound-checkconf'], stderr=subprocess.STDOUT)
-        subprocess.check_output(['/usr/bin/systemctl', 'restart', 'unbound'], stderr=subprocess.STDOUT)
+        subprocess.check_output(
+                ['/usr/bin/systemctl', 'restart', 'unbound'],
+                stderr=subprocess.STDOUT
+            )
     except subprocess.CalledProcessError as e:
         logger.fatal('command %s exited with %s' % (e.cmd, e.returncode,))
         logger.warning(e.output)
