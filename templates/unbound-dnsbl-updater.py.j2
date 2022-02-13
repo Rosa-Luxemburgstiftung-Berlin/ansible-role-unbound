@@ -46,11 +46,11 @@ DNSBL_LISTS = [
     ]
 
 # list of domains to exclude
-DNSBL_EXCLUDE = [
+DNSBL_EXCLUDE = (
     {% for domain in dnsbl_exclude_domains %}
     '{{ domain }}',
     {% endfor %}
-    ]
+    )
 
 class LoggingAction(argparse.Action):
     def __call__(self, parser, namespace, values, option_string=None):
@@ -146,7 +146,7 @@ def main(args):
             sys.argv[0], len(DNSBL_LISTS), datetime.datetime.now()
         )
     errorcount = 0
-    domainlist = []
+    domainlist = set()
     dnsbltmp = tempfile.NamedTemporaryFile(
             dir=args.tempdir,
             prefix='unbound-dnsbl',
@@ -184,11 +184,8 @@ def main(args):
                         domain = lineparts[1]
                     else:
                         domain = lineparts[0]
-                    if domain in domainlist:
-                        domain = '# %s' % domain
-                    for exclude in DNSBL_EXCLUDE:
-                        if domain.endswith(exclude):
-                            domain = '# excluded: %s' % domain
+                    if domain.endswith(DNSBL_EXCLUDE):
+                        continue
                     currentdomainlist.append(domain)
                 currentdomainlist.append('# end %s at %s\n' % (dnsbluri, datetime.datetime.now(),))
 
@@ -213,7 +210,7 @@ def main(args):
                         continue
 
                 writednsbl2file(dnsbltmp, currentdomainlist)
-                domainlist.extend(currentdomainlist)
+                domainlist.union(currentdomainlist)
                 if not args.garbage:
                     os.unlink(tmpf.name)
         except requests.Timeout as e:
@@ -234,7 +231,7 @@ def main(args):
 
     # copy temp file into unbound config dir and reload unbound
     if args.dryrun:
-        logger.warning('skip replacing conf file and unbound restart due to dr-run mode!')
+        logger.warning('skip replacing conf file and unbound restart due to dry-run mode!')
     else:
         shutil.move(dnsbltmp.name, '{{ unbound_cfg_dir_incl }}/dnsbl.conf')
         try:
