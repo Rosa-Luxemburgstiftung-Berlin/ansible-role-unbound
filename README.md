@@ -57,3 +57,11 @@ undbound_config:
 dnsbl_lists:
   - https://blocklistproject.github.io/Lists/alt-version/abuse-nl.txt
 ```
+
+### Some Resources Related to DNSBL
+
+  * https://blocklistproject.github.io/Lists/#versions
+  * https://justdomains.github.io/blocklists/#using-with-pi-hole
+  * https://crazymax.dev/WindowsSpyBlocker/blocking-rules/
+  * https://github.com/StevenBlack/hosts
+  * https://github.com/AdAway/AdAway/wiki/HostsSources
