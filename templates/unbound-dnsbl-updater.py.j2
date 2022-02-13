@@ -32,7 +32,7 @@ import subprocess
 import argparse
 import logging
 import logging.handlers
-from datetime import date
+import datetime
 import tempfile
 from lockfile import LockFile, LockTimeout, locked
 import http.client as http_client
@@ -115,6 +115,7 @@ def main(args):
         dest='nocheckconf', action='store_true', default=False
     )
     args = parser.parse_args()
+
     if args.syslog:
         syslogh = logging.handlers.SysLogHandler(address = '/dev/log')
         syslogh.setFormatter(
@@ -131,6 +132,8 @@ def main(args):
         stdouth.setFormatter(logging.Formatter(lformat))
         logger.addHandler(stdouth)
 
+    logging.basicConfig()
+
     if logger.isEnabledFor(logging.DEBUG):
         http_client.HTTPConnection.debuglevel = 1
         requests_log = logging.getLogger("requests.packages.urllib3")
@@ -138,7 +141,10 @@ def main(args):
         requests_log.propagate = True
 
     # start fetching
-    logger.info('start at %s', date.today().ctime())
+    logger.info(
+            'start %s for %s dnsbl lists at %s',
+            sys.argv[0], len(DNSBL_LISTS), datetime.datetime.now()
+        )
     errorcount = 0
     domainlist = []
     dnsbltmp = tempfile.NamedTemporaryFile(
@@ -151,7 +157,7 @@ def main(args):
     logger.info('using %s as main  temp file', dnsbltmp.name)
     dnsbltmp.write(
             '# dnsbl file created by %s at %s\n' % (
-                    os.path.basename(__file__), date.today().ctime(),)
+                    os.path.basename(__file__), datetime.datetime.now(),)
         )
     dnsbltmp.write('server:\n')
     for dnsbluri in DNSBL_LISTS:
@@ -163,7 +169,7 @@ def main(args):
                 logger.warning('failed to fetched %s : http code: %s', dnsbluri, r.status_code)
                 errorcount += 1
             else:
-                currentdomainlist = ['# start %s at %s\n' % (dnsbluri, date.today().ctime(),)]
+                currentdomainlist = ['# start %s at %s\n' % (dnsbluri, datetime.datetime.now(),)]
                 for line in r.text.splitlines():
                     line = line.strip()
                     if not line:
@@ -184,7 +190,7 @@ def main(args):
                         if domain.endswith(exclude):
                             domain = '# excluded: %s' % domain
                     currentdomainlist.append(domain)
-                currentdomainlist.append('# end %s at %s\n' % (dnsbluri, date.today().ctime(),))
+                currentdomainlist.append('# end %s at %s\n' % (dnsbluri, datetime.datetime.now(),))
 
                 if not args.nocheckconf:
                     tmpf = tempfile.NamedTemporaryFile(
@@ -243,7 +249,7 @@ def main(args):
             logger.warning(e.output)
             sys.exit(126)
 
-    logger.info('done with %s errors at %s', errorcount, date.today().ctime())
+    logger.info('done with %s errors at %s', errorcount, datetime.datetime.now())
     sys.exit(errorcount)
 
 if __name__ == "__main__":
