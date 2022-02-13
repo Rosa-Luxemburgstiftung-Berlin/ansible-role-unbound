@@ -34,8 +34,8 @@ import logging
 import logging.handlers
 import datetime
 import tempfile
-from lockfile import LockFile, LockTimeout, locked
 import http.client as http_client
+from lockfile import locked
 import requests
 
 # list of dnsbl uri's to fetch
@@ -53,12 +53,14 @@ DNSBL_EXCLUDE = (
     )
 
 class LoggingAction(argparse.Action):
+    """simple helper class for argparse and logging"""
     def __call__(self, parser, namespace, values, option_string=None):
         logger = logging.getLogger()
         logger.setLevel(values)
         setattr(namespace, self.dest, values)
 
 def validatednsbl(filename):
+    """call unbound-checkconf on a file and return result"""
     try:
         subprocess.check_output(
                 ['/usr/sbin/unbound-checkconf', filename],
@@ -70,6 +72,7 @@ def validatednsbl(filename):
         return (e.returncode, e.output)
 
 def writednsbl2file(filep, domains):
+    """write list to file in unbound format"""
     filep.write(
         '\n'.join(
             [d if d.startswith('#') else 'local-data: "%s A 0.0.0.0"' % d for d in domains]
@@ -79,12 +82,9 @@ def writednsbl2file(filep, domains):
 
 @locked('/var/lock/dnsbl', timeout=30)
 def main(args):
+    """main function"""
     logger = logging.getLogger()
     lformat='%(levelname)s\t[%(name)s] %(funcName)s: %(message)s'
-    #logging.basicConfig(
-    #    level=logging.WARN,
-    #    format=lformat
-    #)
 
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
