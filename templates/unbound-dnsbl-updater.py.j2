@@ -227,18 +227,21 @@ def main(args):
             sys.exit(126)
 
     # copy temp file into unbound config dir and reload unbound
-    shutil.move(dnsbltmp.name, '{{ unbound_cfg_dir_incl }}/dnsbl.conf')
-    try:
-        if not args.nocheckconf:
-            subprocess.check_output(['/usr/sbin/unbound-checkconf'], stderr=subprocess.STDOUT)
-        subprocess.check_output(
-                ['/usr/sbin/service', 'unbound', 'restart'],
-                stderr=subprocess.STDOUT
-            )
-    except subprocess.CalledProcessError as e:
-        logger.fatal('command %s exited with %s', e.cmd, e.returncode)
-        logger.warning(e.output)
-        sys.exit(126)
+    if args.dryrun:
+        logger.warning('skip replacing conf file and unbound restart due to dr-run mode!')
+    else:
+        shutil.move(dnsbltmp.name, '{{ unbound_cfg_dir_incl }}/dnsbl.conf')
+        try:
+            if not args.nocheckconf:
+                subprocess.check_output(['/usr/sbin/unbound-checkconf'], stderr=subprocess.STDOUT)
+            subprocess.check_output(
+                    ['/usr/sbin/service', 'unbound', 'restart'],
+                    stderr=subprocess.STDOUT
+                )
+        except subprocess.CalledProcessError as e:
+            logger.fatal('command %s exited with %s', e.cmd, e.returncode)
+            logger.warning(e.output)
+            sys.exit(126)
 
     logger.info('done with %s errors at %s', errorcount, date.today().ctime())
     sys.exit(errorcount)
