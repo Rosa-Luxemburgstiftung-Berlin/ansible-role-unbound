@@ -14,7 +14,7 @@ jobs:
         with:
           path: 'rls.unbound'
       - name: run ansible-lint
-        uses: ansible/ansible-lint-action@a988f94ae932d08266bd63b28f293a0ee854442f
+        uses: ansible/ansible-lint-action@78b653f36ce0fb6867286f143fd8fbafb300f3f0
         with:
           override-deps: |
             rich>=9.5.1,<11.0.0
