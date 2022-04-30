@@ -22,7 +22,7 @@
 
 __doc__ = """
 simple script to fetch a defined list of dnsbl uri's
-and convert them to unbound compatible format 
+and convert them to unbound compatible format
 """
 
 import sys
@@ -103,7 +103,7 @@ def main(args):
         dest='dryrun', action='store_true', default=False
     )
     parser.add_argument(
-        '-g', '--np-garbage-cleanup', help='do not delete temporary files',
+        '-g', '--no-garbage-cleanup', help='do not delete temporary files',
         dest='garbage', action='store_true', default=False
     )
     parser.add_argument(
