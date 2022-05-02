@@ -62,6 +62,7 @@ class LoggingAction(argparse.Action):
 def validatednsbl(filename):
     """call unbound-checkconf on a file and return result"""
     try:
+        logging.info('unbound-checkconf %s ...', filename)
         subprocess.check_output(
                 ['/usr/sbin/unbound-checkconf', filename],
                 stderr=subprocess.STDOUT
@@ -69,6 +70,10 @@ def validatednsbl(filename):
         logging.info('unbound-checkconf %s: OK', filename)
         return (0, 'OK')
     except subprocess.CalledProcessError as e:
+        logging.warning(
+                'unbound-checkconf %s : ecode %s "%s"',
+                filename, e.returncode, e.output
+            )
         return (e.returncode, e.output)
 
 def writednsbl2file(filep, domains):
