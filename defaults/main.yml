@@ -70,8 +70,17 @@ dnsbl_lists: []
 # exclude these domains from dnsbl
 dnsbl_exclude_domains: []
 
-# update the dnsbl_lists every day via cron job
-dnsbl_update_daily: true
+# update the dnsbl_lists via cron job
+dnsbl_update_cron: "{{ dnsbl_update_daily | default(true) }}"
+dnsbl_cron_minute: 15
+dnsbl_cron_hour: 1
+# dnsbl_cron_weekday: optional
+# dnsbl_cron_day: optional
+# dnsbl_update_daily: true  # this is a legacy entry and should be replaced by dnsbl_update_cron
+
+# optional: you can redirect the output in the cron job to a file if you like
+# pls pay attention to the starting space in the definition!
+# dnsbl_cron_shell_redirect: " >/var/log/dnsblupdate.log 2>&1"
 
 unbound_packages_dnsbl:
   - python3-requests

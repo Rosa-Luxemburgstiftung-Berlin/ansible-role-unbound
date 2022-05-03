@@ -54,11 +54,13 @@
       cron:
         name: unbounddnsblupdater
         cron_file: unbounddnsblupdater
-        minute: 15
-        hour: 1
+        minute: "{{ dnsbl_cron_minute }}"
+        hour: "{{ dnsbl_cron_hour }}"
+        day: "{{ dnsbl_cron_day | default(omit) }}"
+        weekday: "{{ dnsbl_cron_weekday | default(omit) }}"
         user: root
-        job: "{{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py -s -l INFO"
-        state: "{{ 'present' if dnsbl_update_daily else 'absent' }}"
+        job: "{{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py -s -l INFO{{ dnsbl_cron_shell_redirect | default('') }}"
+        state: "{{ 'present' if dnsbl_update_cron else 'absent' }}"
       when:
         - not lookup('env', 'MOLECULE_FILE')
   when: dnsbl_lists
