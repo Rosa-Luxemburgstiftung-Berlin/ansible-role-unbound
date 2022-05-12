@@ -4,6 +4,7 @@
     dnsbltestlists:
       - https://raw.githubusercontent.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound/main/molecule/default/testdnsbl.txt
     dnsbl_lists: "{{ dnsbl_lists_available + dnsbltestlists }}"
+    dnsbl_match_subdomains: true
     dnsbl_exclude_domains:
       - repo.zero-sys.net
   tasks:
