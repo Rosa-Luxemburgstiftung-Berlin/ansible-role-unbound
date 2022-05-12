@@ -70,6 +70,11 @@ dnsbl_lists: []
 # exclude these domains from dnsbl
 dnsbl_exclude_domains: []
 
+# match all subdomains matching a dnsbl entry?
+# if set to true and you have a list blocking
+# donaldtrump.com, duck.donaldtrump.com and all opther subdomains will be blocked too
+dnsbl_match_subdomains: false
+
 # update the dnsbl_lists via cron job
 dnsbl_update_cron: "{{ dnsbl_update_daily | default(true) }}"
 dnsbl_cron_minute: 15
