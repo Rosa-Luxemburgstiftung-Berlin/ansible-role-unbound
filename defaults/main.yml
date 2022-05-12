@@ -71,8 +71,9 @@ dnsbl_lists: []
 dnsbl_exclude_domains: []
 
 # match all subdomains matching a dnsbl entry?
-# if set to true and you have a list blocking
-# donaldtrump.com, duck.donaldtrump.com and all opther subdomains will be blocked too
+# if set to true and you have a list blocking i.e.
+# donaldtrump.com, duck.donaldtrump.com, s..., f...
+# and all other subdomains will be blocked too
 dnsbl_match_subdomains: false
 
 # update the dnsbl_lists via cron job
