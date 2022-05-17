@@ -50,7 +50,8 @@
       command: "{{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py -s -l INFO"
       args:
         creates: "{{ unbound_cfg_dir_incl }}/dnsbl.conf"
-    - name: register cronjob
+      notify: "restart unbound"
+    - name: register dnsblupdater cronjob
       cron:
         name: unbounddnsblupdater
         cron_file: unbounddnsblupdater
@@ -64,3 +65,19 @@
       when:
         - not lookup('env', 'MOLECULE_FILE')
   when: dnsbl_lists
+
+- name: demote dnsbl
+  block:
+    - name: un-register dnsblupdater cronjob
+      cron:
+        name: unbounddnsblupdater
+        cron_file: unbounddnsblupdater
+        state: absent
+      when:
+        - not lookup('env', 'MOLECULE_FILE')
+    - name: remove {{ unbound_cfg_dir_incl }}/dnsbl.conf
+      file:
+        path: "{{ unbound_cfg_dir_incl }}/dnsbl.conf"
+        state: absent
+      notify: "restart unbound"
+  when: not dnsbl_lists
