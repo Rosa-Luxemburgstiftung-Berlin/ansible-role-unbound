@@ -5,3 +5,4 @@
   service:
     name: unbound
     state: restarted
+  throttle: 1
