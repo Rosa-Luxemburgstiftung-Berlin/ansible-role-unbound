@@ -10,7 +10,7 @@
 {% for sectionconfiglistpart in sectionconfig %}
 {{ section }}:
 {% for k, v in sectionconfiglistpart.items() | list %}
-	{% if v is string %}
+	{% if v is string or v is integer %}
 	{{ k }}: {{ v }}
 	{% elif v is iterable %}
 	{% for le in v %}
@@ -22,7 +22,7 @@
 {% else -%} {# assumes this is simple section i.e. a dict of config options #}
 {{ section }}:
 {% for k, v in sectionconfig.items() | list %}
-	{% if v is string %}
+	{% if v is string or v is integer %}
 	{{ k }}: {{ v }}
 	{% elif v is iterable %}
 	{% for le in v %}
