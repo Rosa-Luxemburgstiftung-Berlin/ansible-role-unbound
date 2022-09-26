@@ -66,6 +66,9 @@ jobs:
       - name: Install test dependencies.
         run: pip3 install requests dnspython "ansible==2.9.27" "molecule[docker,lint]==3.2.3" "yamllint==1.24.2" "ansible-lint==4.2.0"
 
+      - name: Install collections required on ansible 2.9
+        run: ansible-galaxy collection install community.general
+
       - name: run molecule tests
         run: molecule test
         working-directory: rls.unbound
