@@ -2,19 +2,19 @@
 # tasks file for rls.unbound
 
 - name: install unbound packages
-  apt:
+  ansible.builtin.apt:
     name: "{{ unbound_packages }}"
     update_cache: true
 
 - name: remove system config files
-  file:
+  ansible.builtin.file:
     path: "{{ unbound_cfg_dir_incl }}/{{ item }}"
     state: absent
   with_items: "{{ unbound_remove_files_incl }}"
   notify: "restart unbound"
 
 - name: main config file for unbound
-  copy:
+  ansible.builtin.copy:
     src: unbound.conf
     dest: "{{ unbound_cfg_file_main }}"
     state: file
@@ -24,7 +24,7 @@
   notify: "restart unbound"
 
 - name: config unbound
-  template:
+  ansible.builtin.template:
     src: "{{ item }}.j2"
     dest: "{{ unbound_cfg_dir_incl }}/{{ item }}"
     owner: root
@@ -37,22 +37,22 @@
 - name: dnsbl
   block:
     - name: install packages required for dnsbl
-      apt:
+      ansible.builtin.apt:
         name: "{{ unbound_packages_dnsbl }}"
     - name: copy dnsbl collect script
-      template:
+      ansible.builtin.template:
         src: unbound-dnsbl-updater.py.j2
         dest: "{{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py"
         mode: 0700
         owner: root
         group: root
     - name: "run {{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py"
-      command: "{{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py -s -l INFO"
+      ansible.builtin.command: "{{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py -s -l INFO"
       args:
         creates: "{{ unbound_cfg_dir_incl }}/dnsbl.conf"
       notify: "restart unbound"
     - name: register dnsblupdater cronjob
-      cron:
+      ansible.builtin.cron:
         name: unbounddnsblupdater
         cron_file: unbounddnsblupdater
         minute: "{{ dnsbl_cron_minute }}"
@@ -69,14 +69,14 @@
 - name: demote dnsbl
   block:
     - name: un-register dnsblupdater cronjob
-      cron:
+      ansible.builtin.cron:
         name: unbounddnsblupdater
         cron_file: unbounddnsblupdater
         state: absent
       when:
         - not lookup('env', 'MOLECULE_FILE')
     - name: remove {{ unbound_cfg_dir_incl }}/dnsbl.conf
-      file:
+      ansible.builtin.file:
         path: "{{ unbound_cfg_dir_incl }}/dnsbl.conf"
         state: absent
       notify: "restart unbound"

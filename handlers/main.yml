@@ -2,7 +2,7 @@
 # handlers file for rls.unbound
 
 - name: restart unbound
-  service:
+  ansible.builtin.service:
     name: unbound
     state: restarted
   throttle: 1
