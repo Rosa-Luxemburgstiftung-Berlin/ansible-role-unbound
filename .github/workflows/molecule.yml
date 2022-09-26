@@ -8,7 +8,6 @@ on:
 jobs:
   ansible-latest:
     name: latest ansible version
-    concurrency: moleculetest
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -31,7 +30,6 @@ jobs:
           ANSIBLE_FORCE_COLOR: '1'
   ansible-pinned:
     name: pinned ansible version
-    concurrency: moleculetest
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -54,7 +52,6 @@ jobs:
           ANSIBLE_FORCE_COLOR: '1'
   ansible-legacy:
     name: legacy ansible version
-    concurrency: moleculetest
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
