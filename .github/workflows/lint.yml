@@ -14,10 +14,6 @@ jobs:
         with:
           path: 'rls.unbound'
       - name: run ansible-lint
-        uses: ansible/ansible-lint-action@main
+        uses: ansible/ansible-lint-action@v6.3.0
         with:
-          override-deps: |
-            ansible==6.2.0
-            ansible-lint==6.4.0
           targets: "./"
-          args: "-q"
