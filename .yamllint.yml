@@ -1,0 +1,13 @@
+---
+extends: default
+
+ignore: |
+  molecule/
+  .github/
+
+rules:
+  comments: disable
+  comments-indentation: disable
+  line-length:
+    max: 160
+    level: warning
