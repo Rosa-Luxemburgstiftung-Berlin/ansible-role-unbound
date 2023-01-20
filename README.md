@@ -65,3 +65,4 @@ dnsbl_lists:
   * https://crazymax.dev/WindowsSpyBlocker/blocking-rules/
   * https://github.com/StevenBlack/hosts
   * https://github.com/AdAway/AdAway/wiki/HostsSources
+  * https://oisd.nl/
