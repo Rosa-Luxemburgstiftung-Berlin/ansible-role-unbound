@@ -79,13 +79,22 @@ def validatednsbl(filename):
 
 def writednsbl2file(filep, domains):
     """write list to file in unbound format"""
-    # dnsbl_match_subdomains: {{ dnsbl_match_subdomains }}
+    # dnsbl_match_subdomains: {{ dnsbl_match_subdomains|bool }}
+    # dnsbl_use_always_null: {{ dnsbl_use_always_null|bool }}
 {% if dnsbl_match_subdomains|bool %}
+{% if dnsbl_use_always_null|bool %}
+    filep.write(
+        '\n'.join(
+            [d if d.startswith('#') else 'local-zone: "%s" always_null' % d for d in domains]
+            )
+        )
+{% else %}
     filep.write(
         '\n'.join(
             [d if d.startswith('#') else 'local-zone: "%s" redirect\nlocal-data: "%s A 0.0.0.0"' % (d, d) for d in domains]
             )
         )
+{% endif %}{# end dnsbl_use_always_null #}
 {% else %}
     filep.write(
         '\n'.join(
