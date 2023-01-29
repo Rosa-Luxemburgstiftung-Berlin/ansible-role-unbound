@@ -63,6 +63,7 @@ undbound_config:
 # https://crazymax.dev/WindowsSpyBlocker/blocking-rules/
 # https://github.com/StevenBlack/hosts
 # https://github.com/AdAway/AdAway/wiki/HostsSources
+# https://oisd.nl/
 
 # ad here some lists in order to enable dnsbl
 dnsbl_lists: []
