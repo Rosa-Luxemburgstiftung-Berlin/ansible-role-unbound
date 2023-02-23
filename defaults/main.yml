@@ -100,8 +100,6 @@ unbound_packages_dnsbl:
 
 # use lists in plain domain and hosts/bind syntax
 dnsbl_lists_available:
-  - https://big.oisd.nl/domainswild
-Xdnsbl_lists_available:
   - https://threatfox.abuse.ch/downloads/hostfile
   - https://adaway.org/hosts.txt
   - https://blocklistproject.github.io/Lists/alt-version/abuse-nl.txt
