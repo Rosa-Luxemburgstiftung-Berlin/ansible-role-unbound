@@ -1,5 +1,5 @@
 ---
-name: ansible-lint
+name: pylint
 on:
   pull_request:
   push:
@@ -23,7 +23,7 @@ jobs:
         run: pip3 install requests dnspython ansible "molecule[docker,lint]" yamllint ansible-lint
 
       - name: run molecule converge
-        run: molecule converge
+        run: molecule side-effect
         working-directory: rls.unbound
         env:
           PY_COLORS: '1'

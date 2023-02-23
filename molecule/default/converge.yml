@@ -5,9 +5,3 @@
     - name: "Include rls.unbound"
       include_role:
         name: "rls.unbound"
-    - name: fetch unbound-dnsbl-updater.py
-      ansible.builtin.fetch:
-        src: /etc/unbound/unbound-dnsbl-updater.py
-        dest: /tmp/unbound-dnsbl-updater.py
-        flat: true
-      when: fetch_dnsbl_updater | default(false) | bool
