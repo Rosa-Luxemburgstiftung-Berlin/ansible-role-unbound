@@ -22,7 +22,6 @@ provisioner:
     group_vars:
       all:
         molecule_skip_rebuild_all: "${molecule_skip_rebuild_all}"
-        fetch_dnsbl_updater: "${fetch_dnsbl_updater}"
         unbound_packages:
           - unbound
           - dns-root-data
