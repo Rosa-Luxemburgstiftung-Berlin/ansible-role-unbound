@@ -244,7 +244,7 @@ def main(args):
                 if not args.garbage:
                     os.unlink(tmpf.name)
         except requests.Timeout as e:
-            logger.fatal('requests.Timeout errorcode %s : error: %s', e.code, e)
+            logger.fatal('requests.Timeout error: %s', e)
             errorcount += 1
         except requests.RequestException as e:
             logger.fatal('requests.RequestException: %s', e)
