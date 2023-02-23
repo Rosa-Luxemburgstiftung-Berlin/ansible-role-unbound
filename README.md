@@ -6,8 +6,11 @@
 Install [unbound](https://github.com/NLnetLabs/unbound) on debian based systems
 and extend it optionally by using one or more __dnsbl__ lists.
 
+## unbound-dnsbl-updater.py
+The script `unbound-dnsbl-updater.py` requires **python >= 3.9**
+
 ## dnsbl lists
-The script can handle lists in plain domain and hosts/bind syntax.
+The script can handle lists in plain domain, wilrdcard domain or hosts/bind syntax.
 
 ## Role Variables
 
