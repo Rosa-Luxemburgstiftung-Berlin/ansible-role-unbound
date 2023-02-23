@@ -1,6 +1,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![lint](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound/actions/workflows/lint.yml/badge.svg)](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound/actions?query=workflow%3Aansible-lint)
 [![test](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound/actions/workflows/molecule.yml/badge.svg)](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound/actions/workflows/molecule.yml)
+[![pylint](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound/actions/workflows/pylint.yml/badge.svg)](https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound/actions/workflows/pylint.yml)
 
 # ansible-role-unbound aka. rls.unbound
 Install [unbound](https://github.com/NLnetLabs/unbound) on debian based systems
