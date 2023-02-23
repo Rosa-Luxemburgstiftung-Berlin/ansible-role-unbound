@@ -210,7 +210,7 @@ def main(args):
                         domain = lineparts[0]
                     if domain.endswith(DNSBL_EXCLUDE):
                         continue
-                    currentdomainlist.append(domain)
+                    currentdomainlist.append(domain.removeprefix('*.'))
                 currentdomainlist.append('# end %s at %s\n' % (dnsbluri, datetime.datetime.now(),))
 
                 if not args.nocheckconf:
