@@ -120,7 +120,7 @@ dnsbl_lists_available:
   - https://blocklistproject.github.io/Lists/alt-version/torrent-nl.txt
   - https://blocklistproject.github.io/Lists/alt-version/tracking-nl.txt
   - https://blocklistproject.github.io/Lists/alt-version/youtube-nl.txt
-  - https://raw.githubusercontent.com/sjhgvr/oisd/main/domainswild_big.txt  # https://big.oisd.nl/domainswild
+  - https://big.oisd.nl/domainswild
   - https://justdomains.github.io/blocklists/lists/easylist-justdomains.txt
   - https://justdomains.github.io/blocklists/lists/easyprivacy-justdomains.txt
   - https://justdomains.github.io/blocklists/lists/adguarddns-justdomains.txt
