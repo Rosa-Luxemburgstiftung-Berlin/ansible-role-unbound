@@ -234,6 +234,8 @@ def main(args):
                         logger.warning(validatemsg)
                         errorcount += 1
                         continue
+                    if not args.garbage:
+                        os.unlink(tmpf.name)
 
                 writednsbl2file(dnsbltmp, currentdomainlist)
                 domainlist = domainlist.union(currentdomainlist)
@@ -241,8 +243,6 @@ def main(args):
                         'got %s domains from %s (current total domains: %s)',
                         len(currentdomainlist), dnsbluri, len(domainlist)
                     )
-                if not args.garbage:
-                    os.unlink(tmpf.name)
         except requests.Timeout as e:
             logger.fatal('requests.Timeout error: %s', e)
             errorcount += 1
