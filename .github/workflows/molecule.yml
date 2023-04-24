@@ -20,7 +20,7 @@ jobs:
           python-version: 3.9
 
       - name: Install test dependencies.
-        run: pip3 install requests dnspython ansible "molecule[docker,lint]" yamllint ansible-lint
+        run: pip3 install requests dnspython ansible "molecule[docker,lint]<5.0.0" yamllint ansible-lint
 
       - name: run molecule tests
         run: molecule test
