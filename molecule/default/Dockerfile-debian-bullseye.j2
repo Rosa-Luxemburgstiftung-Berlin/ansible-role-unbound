@@ -5,9 +5,14 @@ FROM debian:bullseye
 ENV container docker
 ENV LC_ALL C
 ENV DEBIAN_FRONTEND noninteractive
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US:en
+ENV LC_ALL en_US.UTF-8
 
 RUN apt-get update \
-    && apt-get install -y python3 sudo bash ca-certificates iproute2 python3-apt aptitude systemd systemd-sysv \
+    && apt-get install -y python3 sudo bash ca-certificates iproute2 python3-apt aptitude systemd systemd-sysv locales \
+    && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
+    && locale-gen en_US.UTF-8 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
