@@ -212,7 +212,8 @@ def main(args):
                         domain = lineparts[0]
                     if domain.endswith(DNSBL_EXCLUDE):
                         continue
-                    # '*.' is considered a valid wildcard prefix, but domains/zones starting with '.' cause errors
+                    # '*.' is considered a valid wildcard prefix,
+                    #   but domains/zones starting with '.' as error
                     domain = domain.removeprefix('*.')
                     if domain.startswith('.'):
                         logger.info('ignoring invalid domain "%s"', domain)
