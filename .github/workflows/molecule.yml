@@ -39,6 +39,10 @@ jobs:
       - name: Install test dependencies.
         run: pip3 install ${{ matrix.pip3deps }}
 
+      - name: Install collections required on ansible 2.9
+        run: ansible-galaxy collection install community.general
+        if: ${{ matrix.ansible == 'legacy ansible' }} 
+
       - name: run molecule tests
         run: molecule test
         working-directory: rls.unbound
