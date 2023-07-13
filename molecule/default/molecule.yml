@@ -2,9 +2,9 @@
 driver:
   name: docker
 platforms:
-  - name: debianbullseye
-    image: debian:bullseye
-    dockerfile: Dockerfile-debian-bullseye.j2
+  - name: instance
+    image: debian:${MOLECULE_DISTRO:-debian11}
+    dockerfile: Dockerfile-${MOLECULE_DISTRO:-debian11}.j2
     privileged: true
     override_command: false
     tmpfs:
