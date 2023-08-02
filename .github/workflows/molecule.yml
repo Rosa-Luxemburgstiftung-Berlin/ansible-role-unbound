@@ -41,7 +41,7 @@ jobs:
 
       - name: Install collections required on ansible 2.9
         run: ansible-galaxy collection install community.general
-        if: ${{ matrix.ansible == 'legacy ansible' }} 
+        if: ${{ matrix.ansible == 'legacy' }} 
 
       - name: run molecule tests
         run: molecule test
