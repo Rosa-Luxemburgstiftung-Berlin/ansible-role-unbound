@@ -21,9 +21,9 @@ jobs:
           - debian12
         include:
           - ansible: latest
-            pip3deps: 'dnspython ansible molecule "molecule-plugins[docker]" yamllint ansible-lint "requests<2.29" "urllib3<2"'
+            pip3deps: 'dnspython ansible molecule "molecule-plugins[docker]" yamllint ansible-lint "urllib3<2"'
           - ansible: pinned
-            pip3deps: 'dnspython "ansible==8.6.0" "molecule-plugins[docker]" "yamllint==1.32.0" "ansible-lint==6.22.0" "requests<2.29" "urllib3<2"'
+            pip3deps: 'dnspython "ansible==8.6.0" "molecule-plugins[docker]" "yamllint==1.32.0" "ansible-lint==6.22.0" "urllib3<2"'
           - ansible: legacy
             pip3deps: 'dnspython "ansible==2.9.27" "molecule[docker,lint]==3.2.3" "yamllint==1.24.2" "ansible-lint==4.2.0" "requests<2.29" "urllib3<2"'
     steps:
