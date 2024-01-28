@@ -11,7 +11,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: 'rls.unbound'
       - name: run ansible-lint
         uses: ansible/ansible-lint@v6.22.2
