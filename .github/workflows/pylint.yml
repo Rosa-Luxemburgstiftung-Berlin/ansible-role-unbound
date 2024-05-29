@@ -20,7 +20,7 @@ jobs:
           python-version: 3.9
 
       - name: Install test dependencies.
-        run: pip3 install dnspython ansible molecule docker==7.0.0 "molecule-plugins[docker]" yamllint ansible-lint
+        run: pip3 install dnspython ansible typing-extensions==4.11.0 molecule docker==7.0.0 "molecule-plugins[docker]" yamllint ansible-lint
 
       - name: run molecule converge
         run: molecule converge
