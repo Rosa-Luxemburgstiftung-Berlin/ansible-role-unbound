@@ -64,7 +64,7 @@
         state: "{{ 'present' if dnsbl_update_cron else 'absent' }}"
       when:
         - not lookup('env', 'MOLECULE_FILE')
-  when: dnsbl_lists | length >
+  when: dnsbl_lists | length > 0
 
 - name: demote dnsbl
   block:
