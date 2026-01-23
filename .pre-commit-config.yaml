@@ -18,13 +18,13 @@ repos:
       - id: yamllint
         files: \.(yaml|yml)$
   - repo: https://github.com/ansible-community/ansible-lint
-    rev: v25.9.0
+    rev: v24.2.1
     hooks:
       - id: ansible-lint
         files: \.(yaml|yml|j2)$
         pass_filenames: false
         always_run: true
         additional_dependencies:
-          - ansible==11.13.0
-          - ansible-core==2.18.12
+          - ansible-core==2.16.4
+          - ansible==9.3.0
           - jmespath
