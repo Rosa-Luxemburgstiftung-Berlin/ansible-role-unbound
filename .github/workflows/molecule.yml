@@ -13,8 +13,10 @@ jobs:
       fail-fast: false
       matrix:
         ansible:
-          - latest
-          - pinned
+          - latest13
+          - latest12
+          - latest11
+          #- pinned
           - legacy
         distro:
           - debian11
