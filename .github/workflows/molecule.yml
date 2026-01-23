@@ -21,6 +21,7 @@ jobs:
         distro:
           - debian11
           - debian12
+          - debian13
         moleculescenario:
           - default
           - redirect
