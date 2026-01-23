@@ -41,10 +41,10 @@
         var: dnsbl_lists
     - name: debug dnsbl_lists length
       ansible.builtin.debug:
-        msg: dnsbl_lists | length
+        msg: "{{ dnsbl_lists | length }}"
     - name: debug dnsbl_lists length bool
       ansible.builtin.debug:
-        msg: dnsbl_lists | length > 0
+        msg: "{{ dnsbl_lists | length > 0 }}"
     - name: install packages required for dnsbl
       ansible.builtin.apt:
         name: "{{ unbound_packages_dnsbl }}"
