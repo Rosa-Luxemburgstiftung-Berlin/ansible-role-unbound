@@ -3,7 +3,8 @@ exclude_paths:
   - molecule/
   - .github/
   - .pre-commit-config.yaml
-  - meta/main.yml
+  - meta/
+  - .ansible/
 
 skip_list:
   - experimental
