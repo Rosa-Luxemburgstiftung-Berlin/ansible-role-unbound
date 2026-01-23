@@ -24,14 +24,20 @@ jobs:
         include:
           - ansible: latest13
             pip3deps: 'dnspython "ansible>=13" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4'
+            pythonversion: 3.13.5
           - ansible: latest12
             pip3deps: 'dnspython "ansible>=12,<13" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4'
+            pythonversion: 3.13.5
           - ansible: latest11
             pip3deps: 'dnspython "ansible>=11,<12" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4'
-          - ansible: pinned
-            pip3deps: 'dnspython "ansible==8.6.0" "molecule-plugins[docker]" "yamllint==1.32.0" "ansible-lint==6.22.0"'
+            pythonversion: 3.13.5
+          #- ansible: pinned
+          #  pip3deps: 'dnspython "ansible==8.6.0" "molecule-plugins[docker]" "yamllint==1.32.0" "ansible-lint==6.22.0"'
+          #  pip3deps: 'dnspython "ansible==2.9.27" "molecule[docker,lint]==3.2.3" "yamllint==1.24.2" "ansible-lint==4.2.0" "requests<2.29" "urllib3<2"'
+            pythonversion: 3.9
           - ansible: legacy
             pip3deps: 'dnspython "ansible==2.9.27" "molecule[docker,lint]==3.2.3" "yamllint==1.24.2" "ansible-lint==4.2.0" "requests<2.29" "urllib3<2"'
+            pythonversion: 3.9
     steps:
       - uses: actions/checkout@v4
         with:
@@ -40,7 +46,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: ${{matrix.pythonversion }}
 
       - name: Install test dependencies.
         run: pip3 install ${{ matrix.pip3deps }}
