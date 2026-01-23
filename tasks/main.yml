@@ -36,6 +36,9 @@
 
 - name: dnsbl
   block:
+    - name: debug dnsbl_lists
+      ansible.builtin.debug:
+        var: dnsbl_lists
     - name: install packages required for dnsbl
       ansible.builtin.apt:
         name: "{{ unbound_packages_dnsbl }}"
