@@ -43,6 +43,9 @@ jobs:
         run: ansible-galaxy collection install community.general
         if: ${{ matrix.ansible == 'legacy' }}
 
+      - name: debug ansible version
+        run: ansible --version
+
       - name: run molecule tests
         run: molecule test
         working-directory: rls.unbound
