@@ -2,7 +2,8 @@
 - name: Converge
   hosts: all
   vars:
-    dnsbl_lists: "[ {% if fetch_dnsbl_updater is defined and fetch_dnsbl_updater %}'https://adaway.org/hosts.txt'{% endif %} ]"
+    dnsbl_lists_str: "[ {% if fetch_dnsbl_updater is defined and fetch_dnsbl_updater %}'https://adaway.org/hosts.txt'{% endif %} ]"
+    dnsbl_lists: "{{ dnsbl_lists_str | from_json }}"
   tasks:
     - name: "Include rls.unbound"
       include_role:
