@@ -21,6 +21,9 @@ jobs:
         distro:
           - debian11
           - debian12
+        moleculescenario:
+          - default
+          - redirect
         include:
           #- ansible: latest13
           #  pip3deps: 'dnspython "ansible>=13" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4'
@@ -58,7 +61,7 @@ jobs:
         run: ansible --version
 
       - name: run molecule tests
-        run: molecule test
+        run: molecule test --scenario-name ${{ matrix.moleculescenario }}
         working-directory: rls.unbound
         env:
           PY_COLORS: '1'
