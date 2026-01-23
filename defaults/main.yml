@@ -82,11 +82,13 @@ dnsbl_match_subdomains: false
 # see https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound/issues/14
 dnsbl_use_always_null: true
 
-# dnsbl redirect method (if dnsbl_match_subdomains==true and dnsbl_use_always_null==false)
+# dnsbl redirect method
 # redirect, inform_redirect
+# considered only if dnsbl_match_subdomains==true and dnsbl_use_always_null==false
 dnsbl_redirect_method: redirect
 
-# dnsbl redirect IP (if dnsbl_use_always_null==false)
+# dnsbl redirect IP
+# considered only if dnsbl_use_always_null==false
 dnsbl_redirect_ip: '0.0.0.0'
 
 # update the dnsbl_lists via cron job
