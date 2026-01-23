@@ -1,0 +1,15 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    dnsbl_lists: "[ {% if fetch_dnsbl_updater is defined and fetch_dnsbl_updater %}'https://adaway.org/hosts.txt'{% endif %} ]"
+  tasks:
+    - name: "Include rls.unbound"
+      include_role:
+        name: "rls.unbound"
+    - name: fetch unbound-dnsbl-updater.py
+      ansible.builtin.fetch:
+        src: /etc/unbound/unbound-dnsbl-updater.py
+        dest: /tmp/unbound-dnsbl-updater.py
+        flat: true
+      when: fetch_dnsbl_updater | default(false) | bool
