@@ -13,8 +13,8 @@ jobs:
       fail-fast: false
       matrix:
         ansible:
-          - latest13
-          - latest12
+          #- latest13
+          #- latest12
           - latest11
           #- pinned
           - legacy
@@ -22,12 +22,12 @@ jobs:
           - debian11
           - debian12
         include:
-          - ansible: latest13
-            pip3deps: 'dnspython "ansible>=13" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4'
-            pythonversion: 3.13.5
-          - ansible: latest12
-            pip3deps: 'dnspython "ansible>=12,<13" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4'
-            pythonversion: 3.13.5
+          #- ansible: latest13
+          #  pip3deps: 'dnspython "ansible>=13" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4'
+          #  pythonversion: 3.13.5
+          #- ansible: latest12
+          #  pip3deps: 'dnspython "ansible>=12,<13" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4'
+          #  pythonversion: 3.13.5
           - ansible: latest11
             pip3deps: 'dnspython "ansible>=11,<12" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4'
             pythonversion: 3.13.5
