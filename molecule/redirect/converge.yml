@@ -2,7 +2,12 @@
 - name: Converge
   hosts: all
   vars:
-    dnsbl_lists: "[ {% if fetch_dnsbl_updater is defined and fetch_dnsbl_updater %}'https://adaway.org/hosts.txt'{% endif %} ]"
+    dnsbltestlists:
+      - https://raw.githubusercontent.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound/main/molecule/default/testdnsbl.txt
+    dnsbl_lists: "{% if molecule_skip_rebuild_all | default(false) %}{{ dnsbl_lists_available + dnsbltestlists }}{% else %}{{ dnsbltestlists }}{% endif %}"
+    dnsbl_match_subdomains: true
+    dnsbl_exclude_domains:
+      - repo.zero-sys.net
   tasks:
     - name: "Include rls.unbound"
       include_role:
