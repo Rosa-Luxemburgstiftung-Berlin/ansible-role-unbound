@@ -41,6 +41,9 @@ jobs:
           - ansible: legacy
             pip3deps: 'dnspython "ansible==2.9.27" "molecule[docker,lint]==3.2.3" "yamllint==1.24.2" "ansible-lint==4.2.0" "requests<2.29" "urllib3<2"'
             pythonversion: 3.9
+      exclude:
+        - ansible: legacy
+          distro: debian13
     steps:
       - uses: actions/checkout@v4
         with:
