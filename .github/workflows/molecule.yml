@@ -3,6 +3,8 @@ name: molecule test
 on:
   pull_request:
   push:
+    branches:
+      - main
   schedule:
     - cron: "10 6 * * 1"
 jobs:
