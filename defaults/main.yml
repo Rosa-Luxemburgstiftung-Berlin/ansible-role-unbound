@@ -87,9 +87,9 @@ dnsbl_use_always_null: true
 # considered only if dnsbl_match_subdomains==true and dnsbl_use_always_null==false
 dnsbl_redirect_method: redirect
 
-# dnsbl redirect IP
+# dnsbl redirect value (IP or domain)
 # considered only if dnsbl_use_always_null==false
-dnsbl_redirect_ip: '0.0.0.0'
+dnsbl_redirect_value: '0.0.0.0'
 
 # update the dnsbl_lists via cron job
 dnsbl_update_cron: "{{ dnsbl_update_daily | default(true) }}"
