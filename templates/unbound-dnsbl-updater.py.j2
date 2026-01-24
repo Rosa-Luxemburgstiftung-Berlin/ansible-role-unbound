@@ -93,14 +93,14 @@ def writednsbl2file(filep, domains):
 {% else %}
     filep.write(
         '\n'.join(
-            [d if d.startswith('#') else 'local-zone: "%s" {{ dnsbl_redirect_method }}\nlocal-data: "%s A {{ dnsbl_redirect_value }}"' % (d, d) for d in domains]
+            [d if d.startswith('#') else 'local-zone: "%s" {{ dnsbl_redirect_method }}\nlocal-data: "%s {{ dnsbl_redirect_rtype }} {{ dnsbl_redirect_value }}"' % (d, d) for d in domains]
             )
         )
 {% endif %}{# end dnsbl_use_always_null #}
 {% else %}
     filep.write(
         '\n'.join(
-            [d if d.startswith('#') else 'local-data: "%s A {{ dnsbl_redirect_value }}"' % d for d in domains]
+            [d if d.startswith('#') else 'local-data: "%s {{ dnsbl_redirect_rtype }} {{ dnsbl_redirect_value }}"' % d for d in domains]
             )
         )
 {% endif %}
