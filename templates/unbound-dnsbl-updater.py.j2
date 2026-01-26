@@ -221,6 +221,8 @@ def main(args):
                     if domain not in domainlist:
                         currentdomainlist.append(domain)
                 currentdomainlist.append('# end %s at %s\n' % (dnsbluri, datetime.datetime.now(),))
+                # make list uniq
+                currentdomainlist = set(currentdomainlist)
 
                 if not args.nocheckconf:
                     tmpf = tempfile.NamedTemporaryFile(
