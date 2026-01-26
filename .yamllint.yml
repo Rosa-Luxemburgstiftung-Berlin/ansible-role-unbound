@@ -6,8 +6,17 @@ ignore: |
   .github/
 
 rules:
-  comments: disable
+  comments:
+    min-spaces-from-content: 1
+    require-starting-space: false
   comments-indentation: disable
   line-length:
     max: 160
     level: warning
+  brackets:
+    max-spaces-inside: 1
+  braces:
+    max-spaces-inside: 1
+  octal-values:
+    forbid-implicit-octal: true
+    forbid-explicit-octal: true

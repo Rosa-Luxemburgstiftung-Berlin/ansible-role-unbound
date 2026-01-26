@@ -1,0 +1,74 @@
+---
+driver:
+  name: docker
+platforms:
+  - name: instance
+    image: debian:${MOLECULE_DISTRO:-debian11}
+    dockerfile: ../default/Dockerfile-${MOLECULE_DISTRO:-debian11}.j2
+    privileged: true
+    override_command: false
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
+    capabilities:
+      - SYS_ADMIN
+    security_opts:
+      - seccomp=unconfined
+
+provisioner:
+  name: ansible
+  inventory:
+    group_vars:
+      all:
+        molecule_skip_rebuild_all: "${molecule_skip_rebuild_all}"
+        fetch_dnsbl_updater: "${fetch_dnsbl_updater}"
+        dnsbl_use_always_null: false
+        dnsbl_redirect_method: inform_redirect
+        dnsbl_redirect_value: '66.66.66.66'
+        unbound_packages:
+          - unbound
+          - dns-root-data
+          - python3-dnspython
+          - bind9-dnsutils
+        undbound_config:
+          server:
+            interface-automatic: "yes"
+            verbosity: 1
+            log-queries: "yes"
+            log-replies: "yes"
+            log-local-actions: "yes"
+            log-servfail: "yes"
+            access-control: 0.0.0.0/0 allow
+            do-ip6: "no"
+            do-udp: "yes"
+            do-tcp: "yes"
+            so-reuseport: "yes"
+            module-config: iterator
+            cache-max-ttl: 86400
+            cache-min-ttl: 0
+            serve-expired: "yes"
+            outgoing-num-tcp: 10
+            incoming-num-tcp: 10
+            root-hints: /usr/share/dns/root.hints
+            auto-trust-anchor-file: /usr/share/dns/root.key
+            harden-glue: "yes"
+            harden-dnssec-stripped: "yes"
+            use-caps-for-id: "yes"
+            prefetch: "yes"
+            local-zone:
+              - '"test.github.com" transparent'
+            local-data:
+              - "'test.github.com A 10.10.10.10'"
+            domain-insecure:
+              - test.github.com
+            private-domain:
+              - test.github.com
+          forward-zone:
+            name: github.com
+            forward-addr:
+              - 1.1.1.1
+              - 9.9.9.9
+
+verifier:
+  name: ansible

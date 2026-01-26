@@ -20,7 +20,7 @@
     state: file
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
   notify: "restart unbound"
 
 - name: config unbound
@@ -29,7 +29,7 @@
     dest: "{{ unbound_cfg_dir_incl }}/{{ item }}"
     owner: root
     group: root
-    mode: 0644
+    mode: '0644'
     validate: /usr/sbin/unbound-checkconf %s
   with_items: "{{ unbound_cfg_templates_incl }}"
   notify: "restart unbound"
@@ -43,7 +43,7 @@
       ansible.builtin.template:
         src: unbound-dnsbl-updater.py.j2
         dest: "{{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py"
-        mode: 0700
+        mode: '0700'
         owner: root
         group: root
     - name: "run {{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py"
@@ -64,7 +64,7 @@
         state: "{{ 'present' if dnsbl_update_cron else 'absent' }}"
       when:
         - not lookup('env', 'MOLECULE_FILE')
-  when: dnsbl_lists
+  when: dnsbl_lists | length > 0
 
 - name: demote dnsbl
   block:

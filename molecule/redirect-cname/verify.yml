@@ -1,0 +1,46 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  gather_facts: true
+  tasks:
+  - name: resolve domains
+    set_fact:
+      ip1: "{{ lookup('community.general.dig', 'zero-sys.net.', '@'+ansible_default_ipv4.address) }}"
+      ip2: "{{ lookup('community.general.dig', 'test.github.com.', '@'+ansible_default_ipv4.address) }}"
+      ip3: "{{ lookup('community.general.dig', 'dap.zero-sys.net.', '@'+ansible_default_ipv4.address, qtype='CNAME') }}"
+      # testing dnsbl_match_subdomains
+      ip4: "{{ lookup('community.general.dig', 'xxx.dap.zero-sys.net.', '@'+ansible_default_ipv4.address, qtype='CNAME') }}"
+      ip5: "{{ lookup('community.general.dig', 'repo.zero-sys.net.', '@'+ansible_default_ipv4.address) }}"
+      ip6: "{{ lookup('community.general.dig', dnsbl_redirect_value, '@'+ansible_default_ipv4.address) }}"
+  - name: debug ip1
+    debug:
+      var: ip1
+  - name: debug ip2
+    debug:
+      var: ip2
+  - name: debug ip3
+    debug:
+      var: ip3
+  - name: debug ip4
+    debug:
+      var: ip4
+  - name: debug ip5
+    debug:
+      var: ip5
+  - name: debug ip6
+    debug:
+      var: ip6
+  - name: debug dnsbl_redirect_value
+    debug:
+      var: dnsbl_redirect_value
+  - name: test results
+    assert:
+      that:
+        - ip1 == '95.216.26.215'
+        - ip2 == '10.10.10.10'
+        - ip3 == dnsbl_redirect_value
+        - ip4 == dnsbl_redirect_value
+        - ip5 == '95.216.26.215'
+        - ip6 == '6.6.6.6'

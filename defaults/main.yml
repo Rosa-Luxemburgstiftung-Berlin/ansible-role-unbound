@@ -82,6 +82,16 @@ dnsbl_match_subdomains: false
 # see https://github.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound/issues/14
 dnsbl_use_always_null: true
 
+# dnsbl redirect method
+# redirect, inform_redirect
+# considered only if dnsbl_match_subdomains==true and dnsbl_use_always_null==false
+dnsbl_redirect_method: redirect
+
+# dnsbl redirect value (IP or domain) and resource record type (A, CNAME, ...)
+# considered only if dnsbl_use_always_null==false
+dnsbl_redirect_value: '0.0.0.0'
+dnsbl_redirect_rtype: 'A'
+
 # update the dnsbl_lists via cron job
 dnsbl_update_cron: "{{ dnsbl_update_daily | default(true) }}"
 dnsbl_cron_minute: 15
@@ -133,4 +143,4 @@ dnsbl_lists_available:
   - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
   - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/update.txt
   - https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/extra.txt
-  - https://pgl.yoyo.org/adservers/serverlist.php?hostformat=nohtml&showintro=0&mimetype=plaintext
+  # pgl.yoyo.org is down - https://pgl.yoyo.org/adservers/serverlist.php?hostformat=nohtml&showintro=0&mimetype=plaintext
