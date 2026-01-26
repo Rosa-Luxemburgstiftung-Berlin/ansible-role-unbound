@@ -21,7 +21,6 @@ jobs:
           #- pinned
           #- legacy
         distro:
-          - debian11
           - debian12
           - debian13
         moleculescenario:
@@ -49,12 +48,8 @@ jobs:
           #  distro: debian13
           - moleculescenario: redirect
             distro: debian13
-          - moleculescenario: redirect
-            distro: debian12
           - moleculescenario: redirect-cname
             distro: debian13
-          - moleculescenario: redirect-cname
-            distro: debian12
     steps:
       - uses: actions/checkout@v4
         with:
