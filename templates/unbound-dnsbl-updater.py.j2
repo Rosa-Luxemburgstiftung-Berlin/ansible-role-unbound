@@ -215,6 +215,8 @@ def main(args):
                     # '*.' is considered a valid wildcard prefix,
                     #   but domains/zones starting with '.' as error
                     domain = domain.removeprefix('*.')
+                    # ensure we have mo final dot
+                    domain = domain.removesuffix('.')
                     if domain.startswith('.'):
                         logger.info('ignoring invalid domain "%s"', domain)
                         continue
