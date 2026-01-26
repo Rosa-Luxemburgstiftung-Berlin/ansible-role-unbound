@@ -27,6 +27,7 @@ jobs:
         moleculescenario:
           - default
           - redirect
+          - redirect-cname
         include:
           #- ansible: latest13
           #  pip3deps: 'dnspython "ansible>=13" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4'
@@ -46,6 +47,14 @@ jobs:
         exclude:
           - ansible: legacy
             distro: debian13
+          - moleculescenario: redirect
+            distro: debian13
+          - moleculescenario: redirect
+            distro: debian12
+          - moleculescenario: redirect-cname
+            distro: debian13
+          - moleculescenario: redirect-cname
+            distro: debian12
     steps:
       - uses: actions/checkout@v4
         with:
