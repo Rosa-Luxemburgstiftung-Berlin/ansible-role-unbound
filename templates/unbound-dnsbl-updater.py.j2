@@ -218,7 +218,7 @@ def main(args):
                     if domain.startswith('.'):
                         logger.info('ignoring invalid domain "%s"', domain)
                         continue
-                    if domain not in domainlist:
+                    if domain not in domainlist and domain not in currentdomainlist:
                         currentdomainlist.append(domain)
                 currentdomainlist.append('# end %s at %s\n' % (dnsbluri, datetime.datetime.now(),))
 
