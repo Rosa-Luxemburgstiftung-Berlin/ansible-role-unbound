@@ -189,7 +189,7 @@ def main(args):
     for dnsbluri in DNSBL_LISTS:
         logger.info('start: %s', dnsbluri)
         try:
-            r = requests.get(dnsbluri)
+            r = requests.get(dnsbluri, timeout=({{ dnsbl_lists_fetch_timeout.connect }}, {{ dnsbl_lists_fetch_timeout.read }}))
             logger.info('fetched %s w/ %s', dnsbluri, r.status_code)
             if r.status_code < 200 or r.status_code >= 300:
                 logger.warning('failed to fetched %s : http code: %s', dnsbluri, r.status_code)
