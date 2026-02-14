@@ -69,6 +69,11 @@ undbound_config:
 # see  dnsbl_lists_available: for examples
 dnsbl_lists: []
 
+# timeouts for fetching dnsbl_lists
+dnsbl_lists_fetch_timeout:
+  connect: 10
+  read: 15
+
 # exclude these domains from dnsbl
 dnsbl_exclude_domains: []
 
