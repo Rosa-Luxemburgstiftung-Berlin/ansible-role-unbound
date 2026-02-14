@@ -63,7 +63,9 @@ undbound_config:
 
 dnsbl_lists:
   - https://blocklistproject.github.io/Lists/alt-version/abuse-nl.txt
-```
+  - https://dbl.ipfire.org/lists/malware/domains.txt
+  - https://dbl.ipfire.org/lists/phishing/domains.txt
+
 
 ### Some Resources Related to DNSBL
 
