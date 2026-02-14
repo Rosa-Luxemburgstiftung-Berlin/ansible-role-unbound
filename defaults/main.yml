@@ -113,7 +113,8 @@ unbound_packages_dnsbl:
 # use lists in plain domain and hosts/bind syntax
 dnsbl_lists_available:
   - https://threatfox.abuse.ch/downloads/hostfile
-  - https://adaway.org/hosts.txt
+  - https://urlhaus.abuse.ch/downloads/hostfile/
+  - https://adaway.org/hosts.txt  # ad blocking
   - https://blocklistproject.github.io/Lists/alt-version/abuse-nl.txt
   - https://blocklistproject.github.io/Lists/alt-version/ads-nl.txt
   - https://blocklistproject.github.io/Lists/alt-version/crypto-nl.txt
