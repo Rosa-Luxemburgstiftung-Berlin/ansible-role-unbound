@@ -73,3 +73,4 @@ dnsbl_lists:
   * https://github.com/StevenBlack/hosts
   * https://github.com/AdAway/AdAway/wiki/HostsSources
   * https://oisd.nl/
+  * https://www.ipfire.org/blog/introducing-ipfire-dbl-community-powered-domain-blocking-for-everyone
