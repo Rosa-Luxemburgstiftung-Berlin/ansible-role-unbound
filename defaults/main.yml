@@ -66,15 +66,17 @@ undbound_config:
 # https://oisd.nl/
 
 # ad here some lists in order to enable dnsbl
+# see  dnsbl_lists_available: for examples
 dnsbl_lists: []
 
 # exclude these domains from dnsbl
 dnsbl_exclude_domains: []
 
 # match all subdomains matching a dnsbl entry?
-# if set to true and you have a list blocking i.e.
-# donaldtrump.com, duck.donaldtrump.com, s..., f...
+# if set to true and you have a list blocking i.e. donaldtrump.com,
+# with `dnsbl_match_subdomains: true` duck.donaldtrump.com, su..., fu...
 # and all other subdomains will be blocked too
+# it is recomended to set this to true!
 dnsbl_match_subdomains: false
 
 # if dnsbl_match_subdomains == true
