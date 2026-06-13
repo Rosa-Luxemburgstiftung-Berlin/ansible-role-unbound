@@ -15,11 +15,11 @@ jobs:
       fail-fast: false
       matrix:
         ansible:
-          #- latest13
-          #- latest12
-          - latest11
-          #- pinned
-          #- legacy
+          #- latest
+          - 13
+          - 12
+          - 11
+          - 2.9
         distro:
           - debian12
           - debian13
@@ -28,24 +28,24 @@ jobs:
           - redirect
           - redirect-cname
         include:
-          #- ansible: latest13
-          #  pip3deps: 'dnspython "ansible>=13" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4'
+          #- ansible: latest
+          #  pip3deps: '"ansible>=14" "ansible-core>=2.21" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4 dnspython'
           #  pythonversion: 3.13.5
-          #- ansible: latest12
-          #  pip3deps: 'dnspython "ansible>=12,<13" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4'
-          #  pythonversion: 3.13.5
-          - ansible: latest11
-            pip3deps: 'dnspython "ansible>=11,<12" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4'
+          - ansible: 13
+            pip3deps: '"ansible>=13,<14" "ansible-core>=2.20,<2.21" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4 dnspython'
             pythonversion: 3.13.5
-          #- ansible: pinned
-          #  pip3deps: 'dnspython "ansible==8.6.0" "molecule-plugins[docker]" "yamllint==1.32.0" "ansible-lint==6.22.0"'
-          #  pythonversion: 3.9
-          #- ansible: legacy
-          #  pip3deps: 'dnspython "ansible==2.9.27" "molecule[docker,lint]==3.2.3" "yamllint==1.24.2" "ansible-lint==4.2.0" "requests<2.29" "urllib3<2"'
-          #  pythonversion: 3.9
+          - ansible: 12
+            pip3deps: '"ansible>=12,<13" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4 dnspython'
+            pythonversion: 3.13.5
+          - ansible: 11
+            pip3deps: '"ansible>=11,<12" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4 dnspython'
+            pythonversion: 3.13.5
+          - ansible: 2.9
+            pip3deps: '"ansible==2.9.27" "molecule[docker,lint]==3.2.3" "yamllint==1.24.2" "ansible-lint==4.2.0" "requests<2.29" "urllib3<2" dnspython'
+            pythonversion: 3.9
         exclude:
-          #- ansible: legacy
-          #  distro: debian13
+          - ansible: 2.9
+            distro: debian13
           - moleculescenario: redirect
             distro: debian13
           - moleculescenario: redirect-cname
@@ -67,8 +67,20 @@ jobs:
         run: ansible-galaxy collection install community.general
         if: ${{ matrix.ansible == 'legacy' }}
 
-      - name: debug ansible version
-        run: ansible --version
+      - name: debug
+        run: |
+          ansible --version
+          echo "--------------------"
+          python --version
+          echo "--------------------"
+          pip list
+          echo "--------------------"
+          pwd
+          echo "--------------------"
+          ls -1
+          echo "--------------------"
+          ls -l
+          echo "--------------------"
 
       - name: run molecule tests
         run: molecule test --scenario-name ${{ matrix.moleculescenario }}
