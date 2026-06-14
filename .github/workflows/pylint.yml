@@ -30,7 +30,8 @@ jobs:
         env:
           PY_COLORS: '1'
           ANSIBLE_FORCE_COLOR: '1'
-          fetch_dnsbl_updater: true
+          fetch_dnsbl_updater: "true"
+          run_unbounddnsblupdater_onchange: "false"
 
       - name: install pylint
         run: |

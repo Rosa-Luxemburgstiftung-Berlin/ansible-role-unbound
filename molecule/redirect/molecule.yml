@@ -23,6 +23,7 @@ provisioner:
       all:
         molecule_skip_rebuild_all: "${molecule_skip_rebuild_all:-true}"
         fetch_dnsbl_updater: "${fetch_dnsbl_updater:-false}"
+        run_unbounddnsblupdater_onchange: ${run_unbounddnsblupdater_onchange:-true}
         dnsbl_use_always_null: false
         dnsbl_redirect_method: inform_redirect
         dnsbl_redirect_value: '66.66.66.66'
