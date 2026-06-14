@@ -5,6 +5,9 @@
   hosts: all
   gather_facts: true
   tasks:
+  - name: check DNS results from ansible_default_ipv4.address ...
+    debug:
+      var: ansible_default_ipv4.address
   - name: resolve domains
     set_fact:
       ip1: "{{ lookup('community.general.dig', 'zero-sys.net.', '@'+ansible_default_ipv4.address) }}"
