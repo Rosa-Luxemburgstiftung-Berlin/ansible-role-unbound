@@ -75,9 +75,12 @@ undbound_config:
 # https://github.com/AdAway/AdAway/wiki/HostsSources
 # https://oisd.nl/
 
-# ad here some lists in order to enable dnsbl
+# add here some lists in order to enable dnsbl
 # see  dnsbl_lists_available: for examples
 dnsbl_lists: []
+
+# run unbound-dnsbl-updater on changes
+run_unbounddnsblupdater_onchange: true
 
 # timeouts for fetching dnsbl_lists
 dnsbl_lists_fetch_timeout:

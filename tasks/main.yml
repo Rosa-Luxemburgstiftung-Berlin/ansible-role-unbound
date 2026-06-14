@@ -46,7 +46,13 @@
         mode: '0700'
         owner: root
         group: root
-    - name: "run {{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py"
+      register: _unbounddnsblupdaterpy
+    - name: "update run {{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py"  # noqa no-changed-when
+      ansible.builtin.command: "{{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py -s -l INFO"
+      when:
+        - _unbounddnsblupdaterpy.changed | bool
+        - run_unbounddnsblupdater_onchange | bool
+    - name: "initial run {{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py"  # ensure dnsbl.conf is there
       ansible.builtin.command: "{{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py -s -l INFO"
       args:
         creates: "{{ unbound_cfg_dir_incl }}/dnsbl.conf"
