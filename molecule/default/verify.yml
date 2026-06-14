@@ -13,19 +13,19 @@
       # testing dnsbl_match_subdomains
       ip4: "{{ lookup('community.general.dig', 'xxx.dap.zero-sys.net.', '@'+ansible_default_ipv4.address) }}"
       ip5: "{{ lookup('community.general.dig', 'repo.zero-sys.net.', '@'+ansible_default_ipv4.address) }}"
-  - name: debug ip1
+  - name: debug ip1 zero-sys.net.
     debug:
       var: ip1
-  - name: debug ip2
+  - name: debug ip2 test.github.com.
     debug:
       var: ip2
-  - name: debug ip3
+  - name: debug ip3 dap.zero-sys.net.
     debug:
       var: ip3
-  - name: debug ip4
+  - name: debug ip4 xxx.dap.zero-sys.net.
     debug:
       var: ip4
-  - name: debug ip5
+  - name: debug ip5 repo.zero-sys.net.
     debug:
       var: ip5
   - name: test results
