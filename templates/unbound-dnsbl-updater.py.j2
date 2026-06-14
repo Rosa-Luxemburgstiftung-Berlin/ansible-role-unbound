@@ -43,17 +43,21 @@ import requests
 
 # list of dnsbl uri's to fetch
 DNSBL_LISTS = [
-    {% for dnsbluri in dnsbl_lists -%}
-        '{{ dnsbluri }}',
-    {% endfor -%}
-    ]
+  {% for dnsbluri in dnsbl_lists -%}
+    {% if dnsbluri and ((dnsbluri | length) > 0) -%}
+      '{{ dnsbluri }}',
+    {% endif -%}
+  {% endfor -%}
+  ]
 
 # list of domains to exclude
 DNSBL_EXCLUDE = (
-    {% for domain in dnsbl_exclude_domains %}
-    '{{ domain }}',
-    {% endfor %}
-    )
+  {% for domain in dnsbl_exclude_domains -%}
+    {% if domain and ((domain | length) > 0) -%}
+      '{{ domain }}',
+    {% endif -%}
+  {% endfor -%}
+  )
 
 class LoggingAction(argparse.Action):
     """simple helper class for argparse and logging"""
