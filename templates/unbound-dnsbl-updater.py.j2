@@ -3,7 +3,7 @@
 # pylint: disable=invalid-name,protected-access,too-many-locals,too-many-branches,too-many-statements
 
 
-
+#jinja2: lstrip_blocks: True
 # Ansible managed
 
 # this file is part of
@@ -43,9 +43,9 @@ import requests
 
 # list of dnsbl uri's to fetch
 DNSBL_LISTS = [
-    {% for dnsbluri in dnsbl_lists %}
+    {% for dnsbluri in dnsbl_lists -%}
         '{{ dnsbluri }}',
-    {% endfor %}
+    {% endfor -%}
     ]
 
 # list of domains to exclude
