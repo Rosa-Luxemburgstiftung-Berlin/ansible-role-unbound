@@ -1,6 +1,8 @@
 ---
 # defaults file for rls.unbound
 
+ansible_managed: Ansible managed
+
 unbound_packages:
   - unbound
   - dns-root-data
