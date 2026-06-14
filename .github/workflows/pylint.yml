@@ -22,7 +22,7 @@ jobs:
           python-version: 3.13.5
 
       - name: Install test dependencies.
-        run: pip3 install ansible>=13,<14" "ansible-core>=2.20,<2.21" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4 dnspython
+        run: pip3 install "ansible>=13,<14" "ansible-core>=2.20,<2.21" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4 dnspython
 
       - name: run molecule converge
         run: molecule converge
