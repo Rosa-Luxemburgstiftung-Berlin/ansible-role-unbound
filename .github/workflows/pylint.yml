@@ -19,10 +19,10 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.9
+          python-version: 3.13.5
 
       - name: Install test dependencies.
-        run: pip3 install dnspython ansible molecule "molecule-plugins[docker]" requests==2.31.0 yamllint ansible-lint
+        run: pip3 install ansible>=13,<14" "ansible-core>=2.20,<2.21" molecule "molecule-plugins[docker]" yamllint ansible-lint requests==2.32.4 dnspython
 
       - name: run molecule converge
         run: molecule converge
