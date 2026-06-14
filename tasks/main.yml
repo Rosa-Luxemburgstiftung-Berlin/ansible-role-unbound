@@ -47,6 +47,14 @@
         owner: root
         group: root
       register: _unbounddnsblupdaterpy
+    - name: debug _unbounddnsblupdaterpy.changed
+      ansible.builtin.debug:
+        var: _unbounddnsblupdaterpy.changed
+        verbosity: 1
+    - name: debug run_unbounddnsblupdater_onchange
+      ansible.builtin.debug:
+        var: run_unbounddnsblupdater_onchange
+        verbosity: 1
     - name: "update run {{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py"  # noqa no-changed-when
       ansible.builtin.command: "{{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py -s -l INFO"
       when:

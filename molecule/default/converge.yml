@@ -4,6 +4,9 @@
   vars:
     dnsbl_lists: ["{% if fetch_dnsbl_updater is defined and fetch_dnsbl_updater %}'https://adaway.org/hosts.txt'{% endif %}"]
   tasks:
+    - name: debug run_unbounddnsblupdater_onchange
+      debug:
+        var: run_unbounddnsblupdater_onchange
     - name: "Include rls.unbound"
       include_role:
         name: "rls.unbound"
