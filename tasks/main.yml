@@ -52,6 +52,7 @@
       when:
         - _unbounddnsblupdaterpy.changed | bool
         - run_unbounddnsblupdater_onchange | bool
+      notify: "restart unbound"
     - name: "initial run {{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py"  # ensure dnsbl.conf is there
       ansible.builtin.command: "{{ unbound_cfg_dir_main }}/unbound-dnsbl-updater.py -s -l INFO"
       args:
