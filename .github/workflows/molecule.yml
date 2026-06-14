@@ -70,7 +70,7 @@ jobs:
 
       - name: Install collections required on ansible 2.9
         run: ansible-galaxy collection install community.general
-        if: ${{ matrix.ansible == 'legacy' }}
+        if: ${{ matrix.ansible == '2.9' }}
 
       - name: debug
         run: |
