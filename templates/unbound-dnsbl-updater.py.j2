@@ -54,7 +54,7 @@ DNSBL_LISTS = [
 DNSBL_EXCLUDE = (
   {% for domain in dnsbl_exclude_domains -%}
     {% if domain and ((domain | length) > 0) -%}
-      '{{ domain }}',
+      '{{ domain.strip("'\"") }}',
     {% endif -%}
   {% endfor -%}
   )
