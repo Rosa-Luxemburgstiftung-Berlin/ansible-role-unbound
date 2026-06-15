@@ -1,9 +1,9 @@
+#jinja2: lstrip_blocks: True
 #! /usr/bin/env python3
 # vim: tabstop=4 expandtab shiftwidth=4 softtabstop=4 smartindent nu ft=python
 # pylint: disable=invalid-name,protected-access,too-many-locals,too-many-branches,too-many-statements
 
 
-#jinja2: lstrip_blocks: True
 # Ansible managed
 
 # this file is part of
@@ -43,20 +43,20 @@ import requests
 
 # list of dnsbl uri's to fetch
 DNSBL_LISTS = [
-  {% for dnsbluri in dnsbl_lists -%}
-    {% if dnsbluri and ((dnsbluri | length) > 0) -%}
+  {% for dnsbluri in dnsbl_lists %}
+    {% if dnsbluri and ((dnsbluri | length) > 0) %}
       '{{ dnsbluri.strip("'\"") }}',
-    {% endif -%}
-  {% endfor -%}
+    {% endif %}
+  {% endfor %}
   ]
 
 # list of domains to exclude
 DNSBL_EXCLUDE = (
-  {% for domain in dnsbl_exclude_domains -%}
-    {% if domain and ((domain | length) > 0) -%}
+  {% for domain in dnsbl_exclude_domains %}
+    {% if domain and ((domain | length) > 0) %}
       '{{ domain.strip("'\"") }}',
-    {% endif -%}
-  {% endfor -%}
+    {% endif %}
+  {% endfor %}
   )
 
 class LoggingAction(argparse.Action):
