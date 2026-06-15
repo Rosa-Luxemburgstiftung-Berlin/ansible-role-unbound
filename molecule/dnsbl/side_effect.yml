@@ -3,7 +3,7 @@
   vars:
     run_unbounddnsblupdater_onchange: true
     # we test inline template qoute handling
-    dnsbl_lists: ["{% if fetch_dnsbl_updater is defined and fetch_dnsbl_updater %}'https://adaway.org/hosts.txt'{% else %}'https://adaway.org/hosts.txt'{% endif %}",'"https://adaway.org/hosts.txt"']
+    dnsbl_lists: ["{% if fetch_dnsbl_updater is defined and fetch_dnsbl_updater %}'https://adaway.org/hosts.txt'{% else %}'https://adaway.org/hosts.txt'{% endif %}", '"https://adaway.org/hosts.txt"', "'https://adaway.org/hosts.txt'"]
   tasks:
     - name: "Include rls.unbound"
       include_role:
