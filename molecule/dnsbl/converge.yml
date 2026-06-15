@@ -1,0 +1,13 @@
+---
+- name: Converge
+  hosts: all
+  vars:
+    run_unbounddnsblupdater_onchange: true
+    dnsbl_lists:
+      - https://raw.githubusercontent.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound/main/molecule/default/testdnsbl.txt
+      - "https://raw.githubusercontent.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound/main/molecule/default/testdnsbl.txt"
+      - 'https://raw.githubusercontent.com/Rosa-Luxemburgstiftung-Berlin/ansible-role-unbound/main/molecule/default/testdnsbl.txt'
+  tasks:
+    - name: "Include rls.unbound"
+      include_role:
+        name: "rls.unbound"
