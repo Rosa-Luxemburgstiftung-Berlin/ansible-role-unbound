@@ -45,7 +45,7 @@ import requests
 DNSBL_LISTS = [
   {% for dnsbluri in dnsbl_lists -%}
     {% if dnsbluri and ((dnsbluri | length) > 0) -%}
-      '{{ dnsbluri }}',
+      '{{ dnsbluri.strip("'\"") }}',
     {% endif -%}
   {% endfor -%}
   ]
